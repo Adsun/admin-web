@@ -18,14 +18,6 @@ export function checkAuth() {
   })
 }
 
-export function getInfo(token) {
-  return request({
-    url: '/user/info',
-    method: 'get',
-    params: { token }
-  })
-}
-
 export function logout() {
   return request({
     url: '/logout',
