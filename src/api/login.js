@@ -1,14 +1,15 @@
 import request from '@/utils/request'
 // 登陆
-export function login(userName, loginMsg) {
-  return request({
-    url: '/login',
-    method: 'post',
-    data: {
-      userName,
-      loginMsg
-    }
-  })
+export function login(userName, loginMsg, rememberMe) {
+    return request({
+        url: '/login',
+        method: 'post',
+        data: {
+            userName,
+            loginMsg,
+            rememberMe
+        }
+    })
 }
 
 // export function getInfo(token) {
@@ -21,23 +22,15 @@ export function login(userName, loginMsg) {
 
 // 登出
 export function logout() {
-  return request({
-    url: '/logout',
-    method: 'get'
-  })
-}
-// 发短信请求
-export function sendMsg(name) {
-  return request({
-    url: '/sendMsg',
-    method: 'get',
-    params: { userName: name }
-  })
+    return request({
+        url: '/logout',
+        method: 'get'
+    })
 }
 // 判断登录状态
 export function checkAuth() {
-  return request({
-    url: '/checkAuth',
-    method: 'get'
-  })
+    return request({
+        url: '/checkAuth',
+        method: 'get'
+    })
 }

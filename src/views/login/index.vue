@@ -19,7 +19,6 @@
           auto-complete="on"
           placeholder="password"
           @keyup.enter.native="handleLogin" />
-        <el-button :loading="loading" class = "duanyan" @click.native.prevent="handleSend">短信验证</el-button>
       </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="color: white; margin-left: 10px; margin-bottom: 10px">本机自动登陆</el-checkbox>
       <el-form-item>
@@ -91,27 +90,6 @@ export default {
     // }
     // },
 
-    // 发短信
-    handleSend() {
-      const $this = this
-      if ($this.loginForm.username !== '') {
-        $this.$refs.loginForm.validateField('username', function (valid) {
-          if (!valid) {
-            $this.$store.dispatch('sendMsg', $this.loginForm.username).then(() => {
-              $this.$message({
-                message: '发送成功',
-                type: 'success'
-              })
-              // $this.$router.push({ path: $this.redirect || '/' })
-            }).catch(() => {
-            })
-          } else {
-            console.log('error submit!!')
-            return false
-          }
-        })
-      }
-    },
     // 登陆
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
