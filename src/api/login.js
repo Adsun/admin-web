@@ -1,26 +1,43 @@
 import request from '@/utils/request'
-
-export function login(userName, passWord) {
+// 登陆
+export function login(userName, loginMsg) {
   return request({
     url: '/login',
     method: 'post',
     data: {
       userName,
-      passWord
+      loginMsg
     }
   })
 }
 
-export function checkAuth() {
-  return request({
-    url: '/checkAuth',
-    method: 'get'
-  })
-}
+// export function getInfo(token) {
+//   return request({
+//     url: '/user/info',
+//     method: 'get',
+//     params: { token }
+//   })
+// }
 
+// 登出
 export function logout() {
   return request({
     url: '/logout',
+    method: 'get'
+  })
+}
+// 发短信请求
+export function sendMsg(name) {
+  return request({
+    url: '/sendMsg',
+    method: 'get',
+    params: { userName: name }
+  })
+}
+// 判断登录状态
+export function checkAuth() {
+  return request({
+    url: '/checkAuth',
     method: 'get'
   })
 }

@@ -4,11 +4,12 @@
     <breadcrumb />
     <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
-        <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+        <!--<img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
+        <span>{{sessionStorage.fullName}}</span>
         <i class="el-icon-caret-bottom"/>
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
-        <router-link class="inlineBlock" to="/">
+        <router-link class="inlineBlock" to="/dashboard">
           <el-dropdown-item>
             Home
           </el-dropdown-item>
@@ -25,8 +26,16 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import login from '@/views/login'
 
 export default {
+  data () {
+    return {
+      sessionStorage: {
+        fullName: sessionStorage['fullName'] // fullName值保存
+      }
+    }
+  },
   components: {
     Breadcrumb,
     Hamburger
@@ -37,13 +46,18 @@ export default {
       'avatar'
     ])
   },
+  created() {
+    sessionStorage['fullName'] // 获取fullName值
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },
+    // 登出
     logout() {
       this.$store.dispatch('LogOut').then(() => {
-        location.reload() // 为了重新实例化vue-router对象 避免bug
+        this.$router.push({ path: '/login' })
+//        location.reload() // 为了重新实例化vue-router对象 避免bug
       })
     }
   }
@@ -76,7 +90,6 @@ export default {
       cursor: pointer;
       margin-top: 5px;
       position: relative;
-      line-height: initial;
       .user-avatar {
         width: 40px;
         height: 40px;

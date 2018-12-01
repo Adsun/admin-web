@@ -9,7 +9,7 @@ export function isvalidUsername(str) {
 
 /* 合法uri*/
 export function validateURL(textval) {
-  const urlregex = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/
+  const urlregex = /^(https|http|ftp|rtsp|mms):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/
   return urlregex.test(textval)
 }
 
@@ -28,5 +28,11 @@ export function validateUpperCase(str) {
 /* 大小写字母*/
 export function validatAlphabets(str) {
   const reg = /^[A-Za-z]+$/
+  return reg.test(str)
+}
+
+/* 验证手机号正则*/
+export function validatMobile(str) {
+  const reg =  /^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|19[0-9]|18[0-9])\d{8}$/
   return reg.test(str)
 }

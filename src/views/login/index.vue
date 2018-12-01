@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <h3 class="title">网站管理系统</h3>
+      <h3 class="title">vue-admin-template</h3>
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -19,32 +19,38 @@
           auto-complete="on"
           placeholder="password"
           @keyup.enter.native="handleLogin" />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon icon-class="eye" />
-        </span>
+        <el-button :loading="loading" class = "duanyan" @click.native.prevent="handleSend">短信验证</el-button>
       </el-form-item>
+      <el-checkbox v-model="loginForm.rememberMe" style="color: white; margin-left: 10px; margin-bottom: 10px">本机自动登陆</el-checkbox>
       <el-form-item>
         <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
           Sign in
         </el-button>
       </el-form-item>
+      <div class="tips">
+        <span style="margin-right:20px;">username: admin</span>
+        <span> password: admin</span>
+      </div>
     </el-form>
   </div>
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
+// import { isvalidUsername } from '@/utils/validate'
+
+import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item.vue";
 
 export default {
+  components: {ElFormItem},
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
-      } else {
-        callback()
-      }
-    }
+    // const validateUsername = (rule, value, callback) => {
+    // if (!isvalidUsername(value)) {
+    // callback(new Error('请输入正确的用户名'))
+    // } else {
+    // callback()
+    // }
+    // }
     const validatePass = (rule, value, callback) => {
       if (value.length < 5) {
         callback(new Error('密码不能小于5位'))
@@ -54,12 +60,14 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: '', // 用户名
+        password: '', // 验证码
+        rememberMe: '' // 自动登陆
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+        // username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        username: [{required: true, trigger: 'blur'}],
+        password: [{required: true, trigger: 'blur', validator: validatePass}]
       },
       loading: false,
       pwdType: 'password',
@@ -68,30 +76,57 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
     }
   },
   methods: {
-    showPwd() {
-      if (this.pwdType === 'password') {
-        this.pwdType = ''
-      } else {
-        this.pwdType = 'password'
+    // showPwd() {
+    // if (this.pwdType === 'password') {
+    // this.pwdType = ''
+    // } else {
+    // this.pwdType = 'password'
+    // }
+    // },
+
+    // 发短信
+    handleSend() {
+      const $this = this
+      if ($this.loginForm.username !== '') {
+        $this.$refs.loginForm.validateField('username', function (valid) {
+          if (!valid) {
+            $this.$store.dispatch('sendMsg', $this.loginForm.username).then(() => {
+              $this.$message({
+                message: '发送成功',
+                type: 'success'
+              })
+              // $this.$router.push({ path: $this.redirect || '/' })
+            }).catch(() => {
+            })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       }
     },
+    // 登陆
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then((res) => {
+          this.$store.dispatch('Login', this.loginForm).then((resolve) => {
             this.loading = false
-            if (res.code === 200) {
-              this.$router.push({ path: this.redirect || '/' })
-            } else {
-              console.log('登录失败')
+            if (resolve.code === 200) {
+              // this.$router.push({ path: this.redirect || '/' })
+              // this.$store.dispatch('CheckAuth').then((resolve) => {
+              this.$router.push({ path: '/dashboard' })
+              // sessionStorage['fullName'] = resolve.data[0].fullName
+              // }).catch(() => {
+              //   console.log('error')
+              // })
             }
           }).catch(() => {
             this.loading = false
@@ -129,6 +164,18 @@ $light_gray:#eee;
         -webkit-text-fill-color: #fff !important;
       }
     }
+  }
+
+  .duanyan {
+    width:30%;
+    display: inline-block;
+    height: 47px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    right: 2px;
+    top: 3px;
   }
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);

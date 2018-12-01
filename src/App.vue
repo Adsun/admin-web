@@ -9,3 +9,8 @@ export default {
   name: 'App'
 }
 </script>
+<style>
+  .pageDoct{
+    padding: 20px 5px;
+  }
+</style>

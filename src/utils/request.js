@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
-
+// import { getToken } from '@/utils/auth'
+axios.defaults.withCredentials = true
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api 的 base_url
@@ -9,18 +10,24 @@ const service = axios.create({
 })
 
 // request拦截器
-service.interceptors.request.use(
-  config => {
-    return config
-  },
-  error => {
-    // Do something with request error
-    console.log(error) // for debug
-    Promise.reject(error)
-  }
-)
+// service.interceptors.request.use(
+//   config => {
+//     debugger
+//     // if (store.getters.token) {
+//     //   config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+//     // }
+//     config.credentials = true
+//
+//     return config
+//   },
+//   error => {
+//     // Do something with request error
+//     console.log(error) // for debug
+//     Promise.reject(error)
+//   }
+// )
 
-// response 拦截器
+// // response 拦截器
 service.interceptors.response.use(
   response => {
     /**
@@ -28,13 +35,7 @@ service.interceptors.response.use(
      */
     const res = response.data
     if (res.code !== 200) {
-      Message({
-        message: res.message,
-        type: 'error',
-        duration: 5 * 1000
-      })
-
-      // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
+      // 503代表登陆失效
       if (res.code === 503) {
         MessageBox.confirm(
           '你已被登出，可以取消继续留在该页面，或者重新登录',
@@ -46,11 +47,13 @@ service.interceptors.response.use(
           }
         ).then(() => {
           store.dispatch('FedLogOut').then(() => {
-            location.reload() // 为了重新实例化vue-router对象 避免bug
+            location.href = '/login'
+            // location.reload() // 为了重新实例化vue-router对象 避免bug
           })
         })
+      } else {
+        return Promise.reject(res.desc)
       }
-      return Promise.reject('error')
     } else {
       return response.data
     }

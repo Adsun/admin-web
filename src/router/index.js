@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+// import { checkAuth } from '@/api/login'
 
 // in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
 // detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
@@ -8,6 +9,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '../views/layout/Layout'
+import store from '../store'
 
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
@@ -24,29 +26,146 @@ import Layout from '../views/layout/Layout'
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
-
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    name: 'Dashboard',
-    hidden: true,
-    meta: { title: '主页' },
+    name: '日志',
+    meta: { title: '日志' },
+    beforeEnter: (to, form, next) => {
+      store.dispatch('CheckAuth').then((resolve) => {
+        // $router.push({path: '/dashboard'})
+        // debugger
+        sessionStorage['fullName'] = resolve.data[0].fullName
+        next()
+      }).catch(() => {
+        console.log('error')
+        next('/login')
+      })
+    },
+    // hidden: true,
     children: [{
       path: 'dashboard',
+      meta: { title: '日志' },
       component: () => import('@/views/dashboard/index')
+    },
+    {
+      path: '/login',
+      component: Layout,
+      name: 'login',
+      hidden: true
     }]
   },
-
   {
-    path: '/user',
+    path: '/supplier',
     component: Layout,
+    name: 'Supplier',
+    redirect: '/supplierList',
+    meta: { title: '供应商管理' },
     children: [
       {
-        path: 'index',
-        name: 'User',
-        component: () => import('@/views/user/index'),
-        meta: { title: '用户管理' }
+        path: '/createSupplier',
+        name: 'createSupplier',
+        component: () => import('@/views/supplier/createSupplier/index'),
+        meta: { title: '新建供应商' }
+      },
+      {
+        path: '/supplierList/edit/:id(\\d+)',
+        name: 'editSupplier',
+        component: () => import('@/views/supplier/editSupplier/index'),
+        meta: { title: '修改供应商' },
+        hidden: true
+      },
+      {
+        path: '/supplierList',
+        name: 'SupplierList',
+        component: () => import('@/views/supplier/supplierList/index'),
+        meta: { title: '供应商列表' }
+      },
+      {
+        path: '/appendixList',
+        name: 'ApendixList',
+        component: () => import('@/views/supplier/appendixList/index'),
+        meta: { title: '附件列表' }
+      }
+    ]
+  },
+  {
+    path: '/project',
+    component: Layout,
+    redirect: '/newProject',
+    name: 'Project',
+    meta: { title: '项目管理' },
+    children: [
+      {
+        path: '/newProject',
+        name: 'NewProject',
+        component: () => import('@/views/project/newProject'),
+        meta: { title: '新建项目' }
+      },
+      {
+        path: '/going',
+        name: 'Going',
+        component: () => import('@/views/project/going'),
+        meta: { title: '进行中项目' }
+      },
+      {
+        path: '/update',
+        name: 'Update',
+        component: () => import('@/views/project/update'),
+        meta: { title: '更新项目' },
+        hidden: true
+      },
+      {
+        path: '/already',
+        name: 'Already',
+        component: () => import('@/views/project/already'),
+        meta: { title: '已归档项目' }
+      },
+      {
+        path: '/delete',
+        name: 'Delete',
+        component: () => import('@/views/project/delete/index'),
+        meta: { title: '已删除项目' }
+      },
+      {
+        path: '/invitation',
+        name: 'Invitation',
+        component: () => import('@/views/project/invitation/index'),
+        meta: { title: '协作邀请' }
+      },
+      {
+        path: '/projectList/edit/:id(\\d+)',
+        name: 'editProject',
+        component: () => import('@/views/project/editProject/index'),
+        meta: { title: '修改项目' },
+        hidden: true
+      },
+    ]
+  },
+  {
+    path: '/system',
+    component: Layout,
+    redirect: '/system/employee',
+    name: 'System',
+    meta: { title: '系统设置' },
+    children: [
+      {
+        path: 'employee',
+        name: 'Employee',
+        component: () => import('@/views/system/employee'),
+        meta: { title: '员工管理' }
+      },
+      {
+        path: 'power',
+        name: 'Power',
+        component: () => import('@/views/system/power'),
+        meta: { title: '项目权限管理' }
+      },
+      {
+        path: 'supplierManagement',
+        name: 'SupplierManagement',
+        component: () => import('@/views/system/supplierManagement'),
+        meta: { title: '供应商管理' }
       }
     ]
   },
