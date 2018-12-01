@@ -66,6 +66,18 @@ export const constantRouterMap = [{
         ]
     },
     {
+        path: '/user',
+        component: Layout,
+        meta: { title: '用户管理' },
+        children: [{
+            path: 'index',
+            meta: { title: '用户管理' },
+            component: () =>
+                import ('@/views/user/index')
+
+        }]
+    },
+    {
         path: '/supplier',
         component: Layout,
         name: 'Supplier',
