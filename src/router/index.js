@@ -40,17 +40,6 @@ export const constantRouterMap = [{
         component: Layout,
         name: 'dashboard',
         meta: { title: '主页' },
-        beforeEnter: (to, form, next) => {
-            store.dispatch('CheckAuth').then((resolve) => {
-                // $router.push({path: '/dashboard'})
-                // debugger
-                sessionStorage['fullName'] = resolve.data[0].fullName
-                next()
-            }).catch(() => {
-                console.log('error')
-                next('/login')
-            })
-        },
         hidden: true,
         children: [{
                 path: 'dashboard',
@@ -68,6 +57,7 @@ export const constantRouterMap = [{
     {
         path: '/user',
         component: Layout,
+        name: '用户管理',
         meta: { title: '用户管理' },
         children: [{
             path: 'index',
@@ -81,6 +71,7 @@ export const constantRouterMap = [{
         path: '/supplier',
         component: Layout,
         name: 'Supplier',
+        hidden: true,
         redirect: '/supplierList',
         meta: { title: '供应商管理' },
         children: [{
@@ -119,6 +110,7 @@ export const constantRouterMap = [{
         component: Layout,
         redirect: '/newProject',
         name: 'Project',
+        hidden: true,
         meta: { title: '项目管理' },
         children: [{
                 path: '/newProject',
@@ -178,6 +170,7 @@ export const constantRouterMap = [{
         component: Layout,
         redirect: '/system/employee',
         name: 'System',
+        hidden: true,
         meta: { title: '系统设置' },
         children: [{
                 path: 'employee',
@@ -208,6 +201,7 @@ export const constantRouterMap = [{
         component: Layout,
         redirect: '/example/table',
         name: 'Example',
+        hidden: true,
         meta: { title: 'Example', icon: 'example' },
         children: [{
                 path: 'table',
@@ -229,6 +223,7 @@ export const constantRouterMap = [{
     {
         path: '/form',
         component: Layout,
+        hidden: true,
         children: [{
             path: 'index',
             name: 'Form',
@@ -243,6 +238,7 @@ export const constantRouterMap = [{
         component: Layout,
         redirect: '/nested/menu1',
         name: 'Nested',
+        hidden: true,
         meta: {
             title: 'Nested',
             icon: 'nested'
@@ -303,6 +299,7 @@ export const constantRouterMap = [{
     {
         path: 'external-link',
         component: Layout,
+        hidden: true,
         children: [{
             path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
             meta: { title: 'External Link', icon: 'link' }

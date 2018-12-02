@@ -1,12 +1,14 @@
 import request from '@/utils/request'
+import md5 from 'js-md5'
 // 登陆
 export function login(userName, loginMsg, rememberMe) {
+    const passWord = md5(loginMsg)
     return request({
         url: '/login',
         method: 'post',
         data: {
             userName,
-            loginMsg,
+            passWord,
             rememberMe
         }
     })

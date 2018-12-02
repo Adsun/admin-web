@@ -20,6 +20,7 @@ router.beforeEach((to, from, next) => {
         if (store.getters.roles.length === 0) {
             store.dispatch('CheckAuth').then(res => { // 拉取用户信息
                 if (res.code === 200) {
+                    sessionStorage['fullName'] = res.data
                     next()
                 } else {
                     next({ path: '/login' })

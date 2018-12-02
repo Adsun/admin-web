@@ -56,11 +56,23 @@
             <el-input v-model="createData.fullName" autocomplete="off" />
           </el-col>
         </el-form-item>
-        <el-form-item label="密码"  prop="email">
+        <el-form-item label="密码"  prop="passWord">
           <el-col  :span="18">
-            <el-input v-model="createData.email" autocomplete="off" />
+            <el-input type="password" v-model="createData.passWord" autocomplete="off" />
           </el-col>
         </el-form-item>
+        <el-form-item label="确认密码"  prop="checkPassWord">
+          <el-col  :span="18">
+            <el-input type="password" v-model="createData.checkPassWord" autocomplete="off" />
+          </el-col>
+        </el-form-item>
+        <el-form-item prop="adminInd">
+          <el-col  :span="18">
+            <el-checkbox v-model="createData.adminInd">管理员账号</el-checkbox>
+          </el-col>
+        </el-form-item>
+        
+
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialog = false">取 消</el-button>
@@ -76,9 +88,9 @@ import { Message, MessageBox } from 'element-ui'
 
 export default {
   data() {
-    const validateMobile = (rule, value, callback) => {
-      if (!validatMobile(value)) {
-        callback(new Error('请输入正确的手机号'))
+    const validatePassWord = (rule, value, callback) => {
+      if (value != this.createData.passWord) {
+        callback(new Error('两次输入的密码不一致'))
       } else {
         callback()
       }
@@ -92,22 +104,20 @@ export default {
       totalPage: 1, // 总页数
       tableData: [], // 列表数据
       createData: {
-        id: '', // 用户id,新增不用上传
+        id: null, // 用户id,新增不用上传
         userName: '', // 账户
         fullName: '', // 用户名
-        email: '', // 邮箱
-        basePerCopyFrom: '', // 复制权限
-        parentIds: [], // 业务上级
-        basePermissionIds: [] // 权限 新增与编辑用户不用传，修改权限是传
+        passWord: '', // 密码
+        checkPassWord: '',
+        adminInd: false
       },
       createDataRules: { // 新建用户的验证
-        userName: { required: true, validator: validateMobile, message: '请输入手机号', trigger: 'change' },
+        userName: { required: true, message: '请输入账号', trigger: 'change' },
         fullName: { required: true, message: '请输入姓名', trigger: 'change' },
-        email: { required: true, message: '请输入邮箱', trigger: 'change' },
+        passWord: { required: true, message: '请输入密码', trigger: 'change' },
+        checkPassWord: { required: true, validator: validatePassWord,  message: '两次输入密码不一致', trigger: 'change' },
       },
       addDialog: false, // 新增员工的弹窗是否显示
-      limitsDialog: false, // 权限弹窗
-      limitsList:[] // 权限列表数
     }
   },
   watch: {
@@ -117,12 +127,6 @@ export default {
         this.$refs['createData'].resetFields() // 新增联系人的form表单重置
       }
     },
-    // 编辑权限弹窗隐藏时，清除权限form表单数据
-    'limitsDialog'(curVal, oldVal) {
-      if(!curVal){
-        this.$refs['limistForm'].resetFields() // 新增联系人的form表单重置
-      }
-    }
   },
   created() {
     this.getList()
@@ -130,45 +134,20 @@ export default {
   methods: {
     // 请求用户列表数据
     getList () {
+      
       this.$store.dispatch('getUserList', this.searchformData).then((resolve) => {
+        debugger
         if(resolve.code == 200){
           this.tableData = resolve.data.content
           this.totalPage = resolve.data.totalPages
         }
       }).catch((err) => {
+        debugger
         this.$message({
           type: 'waring',
           message: err
         })
       })
-    },
-    // 权限选中时判断
-    handChange(e, id) {
-      if (e) {
-        if (id === 1) {
-          if (this.createData.basePermissionIds.indexOf(9) === -1) {
-            this.createData.basePermissionIds.push(9)
-          }
-        }
-        if (id === 7) {
-          if (this.createData.basePermissionIds.indexOf(4) === -1) {
-            this.createData.basePermissionIds.push(4)
-          }
-        }
-      } else {
-        if (id === 9) {
-          if (this.createData.basePermissionIds.indexOf(1) != -1) {
-            this.createData.basePermissionIds.push(9)
-          }
-        }
-        if (id === 4) {
-          if (this.createData.basePermissionIds.indexOf(7) != -1) {
-            this.createData.basePermissionIds.push(4)
-          }
-        }
-      }
-
-      console.log(e)
     },
     // 查询
     search () {
@@ -177,13 +156,15 @@ export default {
     },
     // 新建用户
     createUser(form) {
+      debugger
       this.$refs[form].validate((valid) => {
+        debugger
+        
         if (valid) {
           this.$store.dispatch('creatUser', this.createData).then((resolve) => {
             if(resolve.code == 200){
               this.getList() // 刷新列表数据
               this.addDialog = false // 隐藏新增员工的diglog
-              this.limitsDialog = false;
               this.$message({
                 type: 'success',
                 message: '保存成功'
@@ -205,32 +186,8 @@ export default {
       this.$set(this.createData, 'id', row.id)
       this.$set(this.createData, 'userName', row.userName)
       this.$set(this.createData, 'fullName', row.fullName)
-      this.$set(this.createData, 'email', row.email)
-      this.$set(this.createData, 'basePerCopyFrom', row.basePerCopyFrom)
-      this.$set(this.createData, 'parentIds', row.parentIds)
-      this.$set(this.createData, 'basePermissionIds', row.basePermissionIds)
+      this.$set(this.createData, 'adminInd', row.adminInd)
       this.addDialog = true;
-    },
-    // 编辑权限
-    editLimits(row) {
-      this.$set(this.createData, 'id', row.id)
-      this.$set(this.createData, 'userName', row.userName)
-      this.$set(this.createData, 'fullName', row.fullName)
-      this.$set(this.createData, 'email', row.email)
-      this.$set(this.createData, 'basePerCopyFrom', row.basePerCopyFrom)
-      this.$set(this.createData, 'parentIds', row.parentIds)
-      this.$set(this.createData, 'basePermissionIds', row.basePermissionIds)
-      this.$store.dispatch('getLimitsList').then((resolve) => {
-        if(resolve.code == 200){
-          this.limitsList = resolve.data
-          this.limitsDialog = true;
-        }
-      }).catch((err) => {
-        this.$message({
-          type: 'waring',
-          message: err
-        })
-      })
     },
     //  点击分页
     toPage(e) {

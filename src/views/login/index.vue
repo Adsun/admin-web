@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-      <h3 class="title">vue-admin-template</h3>
+      <h3 class="title">网站管理系统</h3>
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -38,6 +38,7 @@
 // import { isvalidUsername } from '@/utils/validate'
 
 import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item.vue";
+import { Message } from 'element-ui';
 
 export default {
   components: {ElFormItem},
@@ -97,14 +98,14 @@ export default {
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then((resolve) => {
             this.loading = false
+            debugger
             if (resolve.code === 200) {
-              // this.$router.push({ path: this.redirect || '/' })
-              // this.$store.dispatch('CheckAuth').then((resolve) => {
               this.$router.push({ path: '/dashboard' })
-              // sessionStorage['fullName'] = resolve.data[0].fullName
-              // }).catch(() => {
-              //   console.log('error')
-              // })
+            } else if (resolve.code === 502) {
+              this.$message({
+          type: 'waring',
+          message: '密码错误'
+        })
             }
           }).catch(() => {
             this.loading = false

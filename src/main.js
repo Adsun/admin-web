@@ -16,14 +16,14 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-Vue.prototype.baseUrl = 'http://39.107.230.91:18080' // 接口地址
+Vue.prototype.baseUrl = 'http://118.24.110.84:18080' // 接口地址
 Vue.use(ElementUI, { zhLocale })
 
 Vue.config.productionTip = false
 
 new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
+    el: '#app',
+    router,
+    store,
+    render: h => h(App)
 })
