@@ -204,15 +204,15 @@ export default {
           type: 'warning'
         }
       ).then(() => {
-        this.$store.dispatch('removeUser', {userId: row.id}).then((res) => {
-          if (res.code === 200) {
+        this.$store.dispatch('removeUser', {userId: row.id}).then((resolve) => {
+          if (resolve.code === 200) {
             this.$set(this.searchformData, 'number', 1);
             this.getList()
             this.$message({
               message: '删除成功',
               type: 'success'
             })
-          } else {
+          }else{
             this.$message({
               message: res.desc,
               type: 'success'
@@ -230,7 +230,7 @@ export default {
           type: 'warning'
         })
       })
-    }
+    },
   }
 }
 </script>

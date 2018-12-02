@@ -55,6 +55,27 @@ export const constantRouterMap = [{
         ]
     },
     {
+        path: '/mide',
+        component: Layout,
+        name: '米德在线',
+        meta: { title: '米德在线' },
+        children: [{
+                path: '/article',
+                name: 'article',
+                component: () =>
+                    import ('@/views/mide/article/index'),
+                meta: { title: '文字管理' }
+            },
+            {
+                path: '/article',
+                name: 'article',
+                component: () =>
+                    import ('@/views/mide/article/index'),
+                meta: { title: '文字管理' }
+            }
+        ]
+    },
+    {
         path: '/user',
         component: Layout,
         name: '用户管理',
@@ -67,235 +88,6 @@ export const constantRouterMap = [{
 
         }]
     },
-    {
-        path: '/supplier',
-        component: Layout,
-        name: 'Supplier',
-        hidden: true,
-        redirect: '/supplierList',
-        meta: { title: '供应商管理' },
-        children: [{
-                path: '/createSupplier',
-                name: 'createSupplier',
-                component: () =>
-                    import ('@/views/supplier/createSupplier/index'),
-                meta: { title: '新建供应商' }
-            },
-            {
-                path: '/supplierList/edit/:id(\\d+)',
-                name: 'editSupplier',
-                component: () =>
-                    import ('@/views/supplier/editSupplier/index'),
-                meta: { title: '修改供应商' },
-                hidden: true
-            },
-            {
-                path: '/supplierList',
-                name: 'SupplierList',
-                component: () =>
-                    import ('@/views/supplier/supplierList/index'),
-                meta: { title: '供应商列表' }
-            },
-            {
-                path: '/appendixList',
-                name: 'ApendixList',
-                component: () =>
-                    import ('@/views/supplier/appendixList/index'),
-                meta: { title: '附件列表' }
-            }
-        ]
-    },
-    {
-        path: '/project',
-        component: Layout,
-        redirect: '/newProject',
-        name: 'Project',
-        hidden: true,
-        meta: { title: '项目管理' },
-        children: [{
-                path: '/newProject',
-                name: 'NewProject',
-                component: () =>
-                    import ('@/views/project/newProject'),
-                meta: { title: '新建项目' }
-            },
-            {
-                path: '/going',
-                name: 'Going',
-                component: () =>
-                    import ('@/views/project/going'),
-                meta: { title: '进行中项目' }
-            },
-            {
-                path: '/update',
-                name: 'Update',
-                component: () =>
-                    import ('@/views/project/update'),
-                meta: { title: '更新项目' },
-                hidden: true
-            },
-            {
-                path: '/already',
-                name: 'Already',
-                component: () =>
-                    import ('@/views/project/already'),
-                meta: { title: '已归档项目' }
-            },
-            {
-                path: '/delete',
-                name: 'Delete',
-                component: () =>
-                    import ('@/views/project/delete/index'),
-                meta: { title: '已删除项目' }
-            },
-            {
-                path: '/invitation',
-                name: 'Invitation',
-                component: () =>
-                    import ('@/views/project/invitation/index'),
-                meta: { title: '协作邀请' }
-            },
-            {
-                path: '/projectList/edit/:id(\\d+)',
-                name: 'editProject',
-                component: () =>
-                    import ('@/views/project/editProject/index'),
-                meta: { title: '修改项目' },
-                hidden: true
-            },
-        ]
-    },
-    {
-        path: '/system',
-        component: Layout,
-        redirect: '/system/employee',
-        name: 'System',
-        hidden: true,
-        meta: { title: '系统设置' },
-        children: [{
-                path: 'employee',
-                name: 'Employee',
-                component: () =>
-                    import ('@/views/system/employee'),
-                meta: { title: '员工管理' }
-            },
-            {
-                path: 'power',
-                name: 'Power',
-                component: () =>
-                    import ('@/views/system/power'),
-                meta: { title: '项目权限管理' }
-            },
-            {
-                path: 'supplierManagement',
-                name: 'SupplierManagement',
-                component: () =>
-                    import ('@/views/system/supplierManagement'),
-                meta: { title: '供应商管理' }
-            }
-        ]
-    },
-
-    {
-        path: '/example',
-        component: Layout,
-        redirect: '/example/table',
-        name: 'Example',
-        hidden: true,
-        meta: { title: 'Example', icon: 'example' },
-        children: [{
-                path: 'table',
-                name: 'Table',
-                component: () =>
-                    import ('@/views/table/index'),
-                meta: { title: 'Table', icon: 'table' }
-            },
-            {
-                path: 'tree',
-                name: 'Tree',
-                component: () =>
-                    import ('@/views/tree/index'),
-                meta: { title: 'Tree', icon: 'tree' }
-            }
-        ]
-    },
-
-    {
-        path: '/form',
-        component: Layout,
-        hidden: true,
-        children: [{
-            path: 'index',
-            name: 'Form',
-            component: () =>
-                import ('@/views/form/index'),
-            meta: { title: 'Form', icon: 'form' }
-        }]
-    },
-
-    {
-        path: '/nested',
-        component: Layout,
-        redirect: '/nested/menu1',
-        name: 'Nested',
-        hidden: true,
-        meta: {
-            title: 'Nested',
-            icon: 'nested'
-        },
-        children: [{
-                path: 'menu1',
-                component: () =>
-                    import ('@/views/nested/menu1/index'), // Parent router-view
-                name: 'Menu1',
-                meta: { title: 'Menu1' },
-                children: [{
-                        path: 'menu1-1',
-                        component: () =>
-                            import ('@/views/nested/menu1/menu1-1'),
-                        name: 'Menu1-1',
-                        meta: { title: 'Menu1-1' }
-                    },
-                    {
-                        path: 'menu1-2',
-                        component: () =>
-                            import ('@/views/nested/menu1/menu1-2'),
-                        name: 'Menu1-2',
-                        meta: { title: 'Menu1-2' },
-                        children: [{
-                                path: 'menu1-2-1',
-                                component: () =>
-                                    import ('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                                name: 'Menu1-2-1',
-                                meta: { title: 'Menu1-2-1' }
-                            },
-                            {
-                                path: 'menu1-2-2',
-                                component: () =>
-                                    import ('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                                name: 'Menu1-2-2',
-                                meta: { title: 'Menu1-2-2' }
-                            }
-                        ]
-                    },
-                    {
-                        path: 'menu1-3',
-                        component: () =>
-                            import ('@/views/nested/menu1/menu1-3'),
-                        name: 'Menu1-3',
-                        meta: { title: 'Menu1-3' }
-                    }
-                ]
-            },
-            {
-                path: 'menu2',
-                component: () =>
-                    import ('@/views/nested/menu2/index'),
-                meta: { title: 'menu2' }
-            }
-        ]
-    },
-
     {
         path: 'external-link',
         component: Layout,

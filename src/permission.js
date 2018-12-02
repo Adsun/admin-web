@@ -12,25 +12,18 @@ router.beforeEach((to, from, next) => {
     // if (getToken()) {
     if (to.path === '/login') {
         next()
-
-        // next({ path: '/' })
         NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
-        debugger
-        if (store.getters.roles.length === 0) {
-            store.dispatch('CheckAuth').then(res => { // 拉取用户信息
-                if (res.code === 200) {
-                    sessionStorage['fullName'] = res.data
-                    next()
-                } else {
-                    next({ path: '/login' })
-                }
-            }).catch((err) => {
+        store.dispatch('CheckAuth').then(res => { // 拉取用户信息
+            if (res.code === 200) {
+                sessionStorage['fullName'] = res.data
+                next()
+            } else {
                 next({ path: '/login' })
-            })
-        } else {
-            next()
-        }
+            }
+        }).catch((err) => {
+            next({ path: '/login' })
+        })
     }
 })
 
