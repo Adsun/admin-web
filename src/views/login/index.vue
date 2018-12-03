@@ -26,10 +26,6 @@
           Sign in
         </el-button>
       </el-form-item>
-      <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: admin</span>
-      </div>
     </el-form>
   </div>
 </template>
@@ -98,7 +94,6 @@ export default {
           this.loading = true
           this.$store.dispatch('Login', this.loginForm).then((resolve) => {
             this.loading = false
-            debugger
             if (resolve.code === 200) {
               this.$router.push({ path: '/dashboard' })
             } else if (resolve.code === 502) {
@@ -139,7 +134,6 @@ $light_gray:#eee;
       color: $light_gray;
       height: 47px;
       &:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
         -webkit-text-fill-color: #fff !important;
       }
     }

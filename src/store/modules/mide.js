@@ -8,7 +8,7 @@ const mide = {
 
   mutations: {},
   actions: {
-    getConstantList(params) {
+    getConstantList(commit, params) {
       return new Promise((resolve, reject) => {
         getConstantList(params).then(response => {
           resolve(response)
@@ -17,7 +17,7 @@ const mide = {
         })
       })
     },
-    getArticleList(params) {
+    getArticleList(commit, params) {
       return new Promise((resolve, reject) => {
         getArticleList(params).then(response => {
           resolve(response)

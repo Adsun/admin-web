@@ -9,7 +9,6 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '../views/layout/Layout'
-import store from '../store'
 
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
@@ -23,86 +22,98 @@ import store from '../store'
     icon: 'svg-name'             the icon show in the sidebar,
   }
 **/
-export const constantRouterMap = [{
+export const constantRouterMap = [
+{
+    path: '/login',
+    component: () =>
+      import('@/views/login/index'),
+    hidden: true
+  },
+  {
+    path: '/404',
+    component: () =>
+      import('@/views/404'),
+    hidden: true
+  },
+  {
+    path: '/',
+    component: Layout,
+    name: 'dashboard',
+    meta: {
+      title: '主页'
+    },
+    hidden: true,
+    children: [
+        {
+        path: 'dashboard',
+        component: () =>
+          import('@/views/dashboard/index')
+      },
+      {
         path: '/login',
-        component: () =>
-            import ('@/views/login/index'),
+        component: Layout,
+        name: 'login',
         hidden: true
+      }
+    ]
+  },
+  {
+    path: '/mide',
+    component: Layout,
+    name: '米德在线',
+    meta: {
+      title: '米德在线'
     },
-    {
-        path: '/404',
-        component: () =>
-            import ('@/views/404'),
-        hidden: true
+    children: [{
+      path: '/article',
+      name: 'article',
+      component: () =>
+        import('@/views/mide/article/index'),
+      meta: {
+        title: '文字管理'
+      }
+    }]
+  },
+  {
+    path: '/user',
+    component: Layout,
+    name: '用户管理',
+    meta: {
+      title: '用户管理'
     },
-    {
-        path: '/',
-        component: Layout,
-        name: 'dashboard',
-        meta: { title: '主页' },
-        hidden: true,
-        children: [{
-                path: 'dashboard',
-                component: () =>
-                    import ('@/views/dashboard/index')
-            },
-            {
-                path: '/login',
-                component: Layout,
-                name: 'login',
-                hidden: true
-            }
-        ]
-    },
-    {
-        path: '/mide',
-        component: Layout,
-        name: '米德在线',
-        meta: { title: '米德在线' },
-        children: [{
-                path: '/article',
-                name: 'article',
-                component: () =>
-                    import ('@/views/mide/article/index'),
-                meta: { title: '文字管理' }
-            },
-            {
-                path: '/article',
-                name: 'article',
-                component: () =>
-                    import ('@/views/mide/article/index'),
-                meta: { title: '文字管理' }
-            }
-        ]
-    },
-    {
-        path: '/user',
-        component: Layout,
-        name: '用户管理',
-        meta: { title: '用户管理' },
-        children: [{
-            path: 'index',
-            meta: { title: '用户管理' },
-            component: () =>
-                import ('@/views/user/index')
+    children: [{
+      path: 'index',
+      meta: {
+        title: '用户管理'
+      },
+      component: () =>
+        import('@/views/user/index')
 
-        }]
-    },
-    {
-        path: 'external-link',
-        component: Layout,
-        hidden: true,
-        children: [{
-            path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-            meta: { title: 'External Link', icon: 'link' }
-        }]
-    },
-
-    { path: '*', redirect: '/404', hidden: true }
+    }]
+  },
+  {
+    path: 'external-link',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
+      meta: {
+        title: 'External Link',
+        icon: 'link'
+      }
+    }]
+  },
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }
 ]
 
 export default new Router({
-    // mode: 'history', //后端支持可开
-    scrollBehavior: () => ({ y: 0 }),
-    routes: constantRouterMap
+  // mode: 'history', //后端支持可开
+  scrollBehavior: () => ({
+    y: 0
+  }),
+  routes: constantRouterMap
 })

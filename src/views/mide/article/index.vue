@@ -31,7 +31,7 @@
     </el-row>
     <!--添加员工按钮弹窗-->
     <el-dialog :visible.sync="addDialog" width="30%" center>
-      <el-form :model="createData" label-width="80px" ref="createData" :rules="createDataRules">
+      <el-form :model="createData" label-width="80px" ref="createData" >
         <el-form-item label="标签名" prop="articleId">
           <el-select v-model="createData.articleId" placeholder="请选择">
             <el-option
@@ -94,13 +94,13 @@ export default {
     }
   },
   created() {
-    this.getConstantList();
-    this.getArticleList();
+    this.getConstantList()
+    this.getArticleList()
   },
   methods: {
     getArticleList() {
       this.$store
-        .dispatch("getArticleList", searchformData)
+        .dispatch("getArticleList", this.searchformData)
         .then(resolve => {
           if (resolve.code == 200) {
             this.tableData = resolve.data.content;
@@ -117,10 +117,10 @@ export default {
     },
     getConstantList() {
       this.$store
-        .dispatch("getConstantList", { types: "1,3,4" })
+        .dispatch("getConstantList", {types: "1,3,4"} )
         .then(resolve => {
           if (resolve.code == 200) {
-            this.tableData = resolve.data;
+            this.constantList = resolve.data;
           }
         })
         .catch(err => {
