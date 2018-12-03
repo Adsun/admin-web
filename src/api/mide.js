@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 
 export function getConstantList(params) {
-    debugger
   return request({
     url: '/constant',
     method: 'get',
@@ -9,10 +8,49 @@ export function getConstantList(params) {
   })
 }
 export function getArticleList(params) {
-    debugger
   return request({
     url: '/article',
     method: 'get',
+    params
+  })
+}
+
+export function editArticle(params) {
+  return request({
+    url: '/article',
+    method: 'post',
+    data: params
+  })
+}
+
+export function deleteArticle(params) {
+  return request({
+    url: '/article',
+    method: 'delete',
+    params
+  })
+}
+
+export function getPictureList(params) {
+  return request({
+    url: '/picture',
+    method: 'get',
+    params
+  })
+}
+
+export function editPicture(params) {
+  return request({
+    url: '/picture',
+    method: 'post',
+    data: params
+  })
+}
+
+export function deletePicture(params) {
+  return request({
+    url: '/picture',
+    method: 'delete',
     params
   })
 }

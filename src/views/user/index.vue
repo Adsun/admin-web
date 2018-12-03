@@ -71,8 +71,6 @@
             <el-checkbox v-model="createData.adminInd">管理员账号</el-checkbox>
           </el-col>
         </el-form-item>
-        
-
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialog = false">取 消</el-button>
