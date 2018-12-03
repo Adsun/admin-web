@@ -214,7 +214,7 @@ export default {
     //  点击分页
     toPage(e) {
       this.$set(this.searchformData, "number", e);
-      this.getArticleList();
+      this.getPictureList();
     },
     // 删除用户
     deletePicture(row) {
@@ -225,11 +225,11 @@ export default {
       })
         .then(() => {
           this.$store
-            .dispatch("deletetPicture", { id: row.id })
+            .dispatch("deletePicture", { id: row.id })
             .then(resolve => {
               if (resolve.code === 200) {
                 this.$set(this.searchformData, "number", 1);
-                this.getList();
+                this.getPictureList();
                 this.$message({
                   message: "删除成功",
                   type: "success"
