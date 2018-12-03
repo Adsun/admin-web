@@ -6,17 +6,27 @@
     </el-col>
     <el-table :data="tableData" style="width: 100%">
       <el-table-column type="index" label="序号" width="70"/>
-      <el-table-column prop="picName" label="图片名称" width="200"/>>
-      <el-table-column prop="path" label="图片" width="400">
+      <el-table-column prop="constantName" label="课程类别" width="100"/>
+      <el-table-column prop="courseName" label="课程名称" width="100"/>
+      <el-table-column prop="startTime" label="开始时间" width="100"/>
+      <el-table-column prop="price" label="价格" width="100"/>
+      <el-table-column prop="courseDtl" label="课程详情" width="200"/>
+      <el-table-column prop="imgUrl" label="课程图片" sortable width="150">
         <template slot-scope="scope">
-          <img :src="scope.row.path" alt style="width: 100px;height: 50px">
+          <img :src="scope.row.imgUrl" alt style="width: 100px;height: 50px">
         </template>
       </el-table-column>
-      <el-table-column prop="url" label="跳转链接" width="400"/>
+      <el-table-column prop="teacher" label="教师姓名" width="100"/>
+      <el-table-column prop="teacherDtl" label="教师简介" width="200"/>
+      <el-table-column prop="teacherImg" label="教师图片" sortable width="150">
+        <template slot-scope="scope">
+          <img :src="scope.row.teacherImg" alt style="width: 100px;height: 50px">
+        </template>
+      </el-table-column>
       <el-table-column prop="operation" label="操作">
         <template slot-scope="scope">
-          <el-button type="text" @click="editPicture(scope.row)">编辑</el-button>
-          <el-button type="text" @click="deletePicture(scope.row)">删除</el-button>
+          <el-button type="text" @click="editCourse(scope.row)">编辑</el-button>
+          <el-button type="text" @click="deleteCourse(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -36,8 +46,8 @@
     <!--添加按钮弹窗-->
     <el-dialog :visible.sync="addDialog" width="30%" center>
       <el-form :model="createData" label-width="80px" ref="createData">
-        <el-form-item label="图片名称" prop="picId">
-          <el-select v-model="createData.picId" placeholder="请选择">
+        <el-form-item label="课程类别" prop="constantId">
+          <el-select v-model="createData.constantId" placeholder="请选择">
             <el-option
               v-for="constant in constantList"
               :key="constant.constantId"
@@ -46,7 +56,29 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="图片" prop="path">
+        <el-form-item label="课程名称" prop="courseName">
+          <el-col>
+            <el-input v-model="createData.courseName" autocomplete="off"/>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="开始时间" prop="startTime">
+          <el-col>
+            <el-input v-model="createData.startTime" autocomplete="off"/>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="价格" prop="price">
+          <el-col>
+            <el-input v-model="createData.price" autocomplete="off"/>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="课程详情" prop="courseDtl">
+          <el-col>
+            <el-input type="textarea"
+                    :autosize="{ minRows: 2, maxRows: 10}"
+                     v-model="createData.courseDtl" autocomplete="off"/>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="课程图片" prop="imgUrl">
           <el-upload
             action="http://118.24.110.84:18080/picture/upload"
             list-type="picture-card"
@@ -63,15 +95,35 @@
             <img width="100%" :src="dialogImageUrl" alt>
           </el-dialog>
         </el-form-item>
-        <el-form-item label="跳转链接" prop="url">
+        <el-form-item label="教师姓名" prop="teacher">
           <el-col>
-            <el-input v-model="createData.url" autocomplete="off"/>
+            <el-input v-model="createData.teacher" autocomplete="off"/>
           </el-col>
+        </el-form-item>
+        <el-form-item label="教师简介" prop="teacherDtl">
+          <el-col>
+            <el-input type="textarea"
+                    :autosize="{ minRows: 2, maxRows: 10}" v-model="createData.teacherDtl" autocomplete="off"/>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="教师图片" prop="teacherImg">
+          <el-upload
+            action="http://118.24.110.84:18080/picture/upload"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :limit="1"
+            :on-success="uploadSuccess"
+            :on-error="uploadError"
+            :with-credentials="true"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialog = false">取 消</el-button>
-        <el-button type="primary" @click="createPicture('createData')">确 定</el-button>
+        <el-button type="primary" @click="createCourse('createData')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -97,9 +149,15 @@ export default {
       tableData: [], // 列表数据
       createData: {
         id: "",
-        picId: "",
-        path: "",
-        url: ""
+        constantId: "",
+        courseName:"",
+        startTime:"",
+        price:"",
+        courseDtl:"",
+        imgUrl:"",
+        teacher: "",
+        teacherDtl: "",
+        teacherImg: ""
       },
       addDialog: false // 弹窗是否显示
     };
@@ -114,14 +172,19 @@ export default {
   },
   created() {
     this.getConstantList();
-    this.getPictureList();
+    this.getCourseList();
   },
   methods: {
     // 上传成功后
-    uploadSuccess(file, suss) {
+    uploadSuccess(response, file, fileList) {
       debugger
       this.loading = false;
-      this.createData.path = file.data;
+      if (file === "imgUrl") {
+        this.createData.imgUrl = response.data;
+      }
+      if (file === "teacherImg") {
+        this.createData.teacherImg = response.data;
+      }
     },
     // 上传失败
     uploadError(file, err) {
@@ -139,9 +202,9 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    getPictureList() {
+    getCourseList() {
       this.$store
-        .dispatch("getPictureList", this.searchformData)
+        .dispatch("getCourseList", this.searchformData)
         .then(resolve => {
           if (resolve.code == 200) {
             this.tableData = resolve.data.content;
@@ -158,7 +221,7 @@ export default {
     },
     getConstantList() {
       this.$store
-        .dispatch("getConstantList", { types: "2" })
+        .dispatch("getConstantList", { types: "3" })
         .then(resolve => {
           if (resolve.code == 200) {
             this.constantList = resolve.data;
@@ -175,17 +238,17 @@ export default {
     // 查询
     search() {
       this.$set(this.searchformData, "number", 1);
-      this.getPictureList();
+      this.getCourseList();
     },
     // 新建用户
-    createPicture(form) {
+    createCourse(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
           this.$store
-            .dispatch("editPicture", this.createData)
+            .dispatch("editCourse", this.createData)
             .then(resolve => {
               if (resolve.code == 200) {
-                this.getPictureList(); // 刷新列表数据
+                this.getCourseList(); // 刷新列表数据
                 this.addDialog = false; // 隐藏新增的diglog
                 this.$message({
                   type: "success",
@@ -203,21 +266,27 @@ export default {
       });
     },
     // 编辑
-    editPicture(row) {
+    editCourse(row) {
       console.log(row);
       this.$set(this.createData, "id", row.id);
-      this.$set(this.createData, "picId", row.picId);
-      this.$set(this.createData, "path", row.path);
-      this.$set(this.createData, "url", row.url);
+      this.$set(this.createData, "constantId", row.constantId);
+      this.$set(this.createData, "courseName", row.courseName);
+      this.$set(this.createData, "startTime", row.startTime);
+      this.$set(this.createData, "price", row.price);
+      this.$set(this.createData, "courseDtl", row.courseDtl);
+      this.$set(this.createData, "imgUrl", row.imgUrl);
+      this.$set(this.createData, "teacher", row.teacher);
+      this.$set(this.createData, "teacherDtl", row.teacherDtl);
+      this.$set(this.createData, "teacherImg", row.teacherImg);
       this.addDialog = true;
     },
     //  点击分页
     toPage(e) {
       this.$set(this.searchformData, "number", e);
-      this.getPictureList();
+      this.getCourseList();
     },
     // 删除用户
-    deletePicture(row) {
+    deleteCourse(row) {
       MessageBox.confirm("您确定要删除吗？", {
         confirmButtonText: "确定删除",
         cancelButtonText: "取消",
@@ -225,11 +294,11 @@ export default {
       })
         .then(() => {
           this.$store
-            .dispatch("deletePicture", { id: row.id })
+            .dispatch("deleteCourse", { id: row.id })
             .then(resolve => {
               if (resolve.code === 200) {
                 this.$set(this.searchformData, "number", 1);
-                this.getPictureList();
+                this.getCourseList();
                 this.$message({
                   message: "删除成功",
                   type: "success"

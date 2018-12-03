@@ -7,7 +7,7 @@
     <el-table :data="tableData" style="width: 100%">
       <el-table-column type="index" label="序号" width="70"/>
       <el-table-column prop="picName" label="图片名称" width="200"/>>
-      <el-table-column prop="path" label="图片" width="400">
+      <el-table-column prop="path" label="图片路径" sortable width="400">
         <template slot-scope="scope">
           <img :src="scope.row.path" alt style="width: 100px;height: 50px">
         </template>
