@@ -1,9 +1,15 @@
 import request from '@/utils/request'
 
-// 获取用户列表数据
 export function getConstantList(params) {
   return request({
-    url: '/userManager',
+    url: '/constant',
+    method: 'get',
+    params
+  })
+}
+export function getArticleList(params) {
+  return request({
+    url: '/article',
     method: 'get',
     params
   })
