@@ -2,16 +2,8 @@
 <template>
   <div class="app-container">
     <el-col :span="18">
-      <el-form :inline="true" :model="searchformData"  label-width="70px" class="formData">
-        <el-form-item :model="searchformData" label="账号">
-          <el-input placeholder="请输入账号" v-model="searchformData.userName">
-            <el-button slot="append" icon="el-icon-search" @click="search"/>
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <el-button style="float: right" @click="addDialog = true">添加账号</el-button>
+      <el-button style="float: left" @click="addDialog = true">添加</el-button>
     </el-col>
-
     <el-table
       :data="tableData"
       style="width: 100%" >
@@ -21,18 +13,22 @@
         width="70" />
       <el-table-column
         prop="userName"
-        label="账号"
+        label="标签名"
         width="200" />
       <el-table-column
         prop="fullName"
-        label="姓名"
-        width="160" />
+        label="内容"
+        width="400" />
+        <el-table-column
+        prop="fullName"
+        label="跳转链接"
+        width="400" />
       <el-table-column
         prop="operation"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" @click="editUser(scope.row)">编辑</el-button>
-          <el-button type="text" @click="deleteData(scope.row)">删除</el-button>
+          <el-button type="text" @click="editArticle(scope.row)">编辑</el-button>
+          <el-button type="text" @click="deleteArticle(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -46,33 +42,21 @@
     <!--添加员工按钮弹窗-->
     <el-dialog :visible.sync="addDialog" width="30%" center>
       <el-form :model="createData" label-width="80px" ref="createData" :rules="createDataRules">
-        <el-form-item label="账号" prop="userName">
+        <el-form-item label="标签名" prop="userName">
           <el-col :span="18">
             <el-input v-model="createData.userName" autocomplete="off" />
           </el-col>
         </el-form-item>
-        <el-form-item label="姓名" prop="fullName">
+        <el-form-item label="内容" prop="fullName">
           <el-col :span="18">
             <el-input v-model="createData.fullName" autocomplete="off" />
           </el-col>
         </el-form-item>
-        <el-form-item label="密码"  prop="passWord">
+        <el-form-item label="跳转链接"  prop="passWord">
           <el-col  :span="18">
             <el-input type="password" v-model="createData.passWord" autocomplete="off" />
           </el-col>
         </el-form-item>
-        <el-form-item label="确认密码"  prop="checkPassWord">
-          <el-col  :span="18">
-            <el-input type="password" v-model="createData.checkPassWord" autocomplete="off" />
-          </el-col>
-        </el-form-item>
-        <el-form-item prop="adminInd">
-          <el-col  :span="18">
-            <el-checkbox v-model="createData.adminInd">管理员账号</el-checkbox>
-          </el-col>
-        </el-form-item>
-        
-
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialog = false">取 消</el-button>

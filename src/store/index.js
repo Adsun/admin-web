@@ -3,17 +3,19 @@ import Vuex from 'vuex'
 import app from './modules/app'
 import login from './modules/login'
 import system from './modules/system'
+import mide from './modules/mide'
 import getters from './getters'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-    modules: {
-        app,
-        login,
-        system
-    },
-    getters
+  modules: {
+    app,
+    login,
+    system,
+    mide
+  },
+  getters
 })
 
 export default store
