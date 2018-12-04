@@ -17,7 +17,7 @@
           v-model="loginForm.username"
           name="username"
           type="text"
-          auto-complete="on"
+          auto-complete="off"
           placeholder="请输入用户名"
         />
       </el-form-item>
@@ -29,7 +29,7 @@
           :type="pwdType"
           v-model="loginForm.password"
           name="password"
-          auto-complete="on"
+          auto-complete="off"
           placeholder="请输入密码"
           @keyup.enter.native="handleLogin"
         />
