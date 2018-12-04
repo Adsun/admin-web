@@ -110,7 +110,6 @@ export default {
           }
         })
         .catch(err => {
-          debugger;
           this.$message({
             type: "waring",
             message: err
@@ -126,7 +125,6 @@ export default {
           }
         })
         .catch(err => {
-          debugger;
           this.$message({
             type: "waring",
             message: err

@@ -82,7 +82,6 @@ export default {
           }
         })
         .catch(err => {
-          debugger;
           this.$message({
             type: "waring",
             message: err
@@ -119,7 +118,7 @@ export default {
                 });
               } else {
                 this.$message({
-                  message: res.desc,
+                  message: "删除失败",
                   type: "success"
                 });
               }

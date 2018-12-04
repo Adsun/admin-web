@@ -7,7 +7,7 @@
     <el-table :data="tableData" style="width: 100%">
       <el-table-column type="index" label="序号" width="50"/>
       <el-table-column prop="name" label="职位名称" width="200"/>
-      <el-table-column prop="eName" label="职位英文名" width="200"/>
+      <el-table-column prop="englishName" label="职位英文名" width="200"/>
       <el-table-column prop="jobDtl" label="职位详情" width="300"/>
       <el-table-column prop="operation" label="操作">
         <template slot-scope="scope">
@@ -37,9 +37,9 @@
             <el-input v-model="createData.name" autocomplete="off"/>
           </el-col>
         </el-form-item>
-        <el-form-item label="职位英文名" prop="eName">
+        <el-form-item label="职位英文名" prop="englishName">
           <el-col>
-            <el-input v-model="createData.eName" autocomplete="off"/>
+            <el-input v-model="createData.englishName" autocomplete="off"/>
           </el-col>
         </el-form-item>
         <el-form-item label="职位详情" prop="jobDtl">
@@ -75,7 +75,7 @@ export default {
         id: "",
         jobDtl: "",
         name:"",
-        eName:""
+        englishName:""
       },
       addDialog: false // 弹窗是否显示
     };
@@ -102,7 +102,6 @@ export default {
           }
         })
         .catch(err => {
-          debugger;
           this.$message({
             type: "waring",
             message: err

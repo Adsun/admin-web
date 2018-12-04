@@ -55,6 +55,10 @@ service.interceptors.response.use(
             })
           })
         } else {
+          Message({
+            type: 'warning',
+            message: res.desc
+          })
           return Promise.reject(res.desc)
         }
       }

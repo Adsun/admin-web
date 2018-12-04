@@ -93,6 +93,13 @@ export default {
         callback()
       }
     }
+    const validatePass = (rule, value, callback) => {
+      if (value.length < 5) {
+        callback(new Error("密码不能小于5位"));
+      } else {
+        callback();
+      }
+    }
     return {
       searchformData: { // 查询参数
         userName: '',
@@ -112,7 +119,7 @@ export default {
       createDataRules: { // 新建用户的验证
         userName: { required: true, message: '请输入账号', trigger: 'change' },
         fullName: { required: true, message: '请输入姓名', trigger: 'change' },
-        passWord: { required: true, message: '请输入密码', trigger: 'change' },
+        passWord: { required: true, message: '请输入密码', trigger: 'change', message: '密码不能小于5位', validator: validatePass },
         checkPassWord: { required: true, validator: validatePassWord,  message: '两次输入密码不一致', trigger: 'change' },
       },
       addDialog: false, // 新增员工的弹窗是否显示
@@ -154,10 +161,7 @@ export default {
     },
     // 新建用户
     createUser(form) {
-      debugger
       this.$refs[form].validate((valid) => {
-        debugger
-        
         if (valid) {
           this.$store.dispatch('creatUser', this.createData).then((resolve) => {
             if(resolve.code == 200){
@@ -176,7 +180,6 @@ export default {
           })
         }
       })
-
     },
     // 编辑用户
     editUser(row) {

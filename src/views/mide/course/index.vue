@@ -184,7 +184,6 @@ export default {
     },
     // 上传成功后
     uploadSuccess(response, file, fileList) {
-      debugger
       this.loading = false;
       if (this.fileType === 1) {
         this.createData.imgUrl = response.data;
@@ -194,7 +193,6 @@ export default {
     },
     // 上传失败
     uploadError(file, err) {
-      debugger
       this.loading = false;
       this.$message({
         message: "上传失败",
@@ -218,7 +216,6 @@ export default {
           }
         })
         .catch(err => {
-          debugger;
           this.$message({
             type: "waring",
             message: err
@@ -234,7 +231,6 @@ export default {
           }
         })
         .catch(err => {
-          debugger;
           this.$message({
             type: "waring",
             message: err
