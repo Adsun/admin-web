@@ -102,6 +102,33 @@ export const constantRouterMap = [
         meta: {
           title: '课程计划'
         }
+      },
+      {
+        path: '/resource',
+        name: 'resource',
+        component: () =>
+          import('@/views/mide/resource/index'),
+        meta: {
+          title: '资源管理'
+        }
+      },
+      {
+        path: '/job',
+        name: 'job',
+        component: () =>
+          import('@/views/mide/job/index'),
+        meta: {
+          title: '职位发布'
+        }
+      },
+      {
+        path: '/feedback',
+        name: 'feedback',
+        component: () =>
+          import('@/views/mide/feedback/index'),
+        meta: {
+          title: '用户反馈'
+        }
       }
     ]
   },
