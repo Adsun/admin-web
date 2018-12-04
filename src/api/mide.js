@@ -78,3 +78,27 @@ export function deleteCourse(params) {
         params
     })
 }
+
+export function getCoursePlanList(params) {
+    return request({
+        url: '/course/plan',
+        method: 'get',
+        params
+    })
+}
+
+export function editCoursePlan(params) {
+    return request({
+        url: '/course/plan',
+        method: 'post',
+        data: params
+    })
+}
+
+export function deleteCoursePlan(params) {
+    return request({
+        url: '/course/plan',
+        method: 'delete',
+        params
+    })
+}

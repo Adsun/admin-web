@@ -5,26 +5,27 @@
       <el-button style="float: left" @click="addDialog = true">添加</el-button>
     </el-col>
     <el-table :data="tableData" style="width: 100%">
-      <el-table-column type="index" label="序号" width="70"/>
-      <el-table-column prop="constantName" label="课程类别" width="100"/>
-      <el-table-column prop="courseName" label="课程名称" width="100"/>
-      <el-table-column prop="startTime" label="开始时间" width="100"/>
-      <el-table-column prop="price" label="价格" width="100"/>
-      <el-table-column prop="courseDtl" label="课程详情" width="200"/>
-      <el-table-column prop="imgUrl" label="课程图片" sortable width="150">
+      <el-table-column type="index" label="序号" width="50"/>
+      <el-table-column prop="constantName" label="课程类别" width="80"/>
+      <el-table-column prop="courseName" label="课程名称" width="80"/>
+      <el-table-column prop="startTime" label="开始时间" width="80"/>
+      <el-table-column prop="price" label="价格" width="80"/>
+      <el-table-column prop="courseDtl" label="课程详情" width="150"/>
+      <el-table-column prop="imgUrl" label="课程图片" width="150">
         <template slot-scope="scope">
           <img :src="scope.row.imgUrl" alt style="width: 100px;height: 50px">
         </template>
       </el-table-column>
-      <el-table-column prop="teacher" label="教师姓名" width="100"/>
-      <el-table-column prop="teacherDtl" label="教师简介" width="200"/>
-      <el-table-column prop="teacherImg" label="教师图片" sortable width="150">
+      <el-table-column prop="teacher" label="教师姓名" width="80"/>
+      <el-table-column prop="teacherDtl" label="教师简介" width="150"/>
+      <el-table-column prop="teacherImg" label="教师图片" width="150">
         <template slot-scope="scope">
           <img :src="scope.row.teacherImg" alt style="width: 100px;height: 50px">
         </template>
       </el-table-column>
       <el-table-column prop="operation" label="操作">
         <template slot-scope="scope">
+          <el-button type="text" @click="coursePlan(scope.row)">课程计划</el-button>
           <el-button type="text" @click="editCourse(scope.row)">编辑</el-button>
           <el-button type="text" @click="deleteCourse(scope.row)">删除</el-button>
         </template>
@@ -85,6 +86,7 @@
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
             :limit="1"
+            :before-upload="function(file){return beforeUpload(file,1)}"
             :on-success="uploadSuccess"
             :on-error="uploadError"
             :with-credentials="true"
@@ -113,6 +115,7 @@
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
             :limit="1"
+            :before-upload="function(file){return beforeUpload(file,2)}"
             :on-success="uploadSuccess"
             :on-error="uploadError"
             :with-credentials="true"
@@ -138,7 +141,7 @@ export default {
     return {
       dialogImageUrl: "",
       dialogVisible: false,
-
+      fileType: "",
       searchformData: {
         // 查询参数
         number: 1,
@@ -175,14 +178,17 @@ export default {
     this.getCourseList();
   },
   methods: {
+    // 上传附件前
+    beforeUpload(file, type) {
+      this.fileType = type
+    },
     // 上传成功后
     uploadSuccess(response, file, fileList) {
       debugger
       this.loading = false;
-      if (file === "imgUrl") {
+      if (this.fileType === 1) {
         this.createData.imgUrl = response.data;
-      }
-      if (file === "teacherImg") {
+      } else {
         this.createData.teacherImg = response.data;
       }
     },
@@ -264,6 +270,14 @@ export default {
             });
         }
       });
+    },
+    coursePlan(row) {
+      this.$router.push({
+        name:'coursePlan',
+        query :{
+          courseId:row.id
+        }
+      })
     },
     // 编辑
     editCourse(row) {

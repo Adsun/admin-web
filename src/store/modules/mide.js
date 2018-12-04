@@ -8,7 +8,10 @@ import {
     deletePicture,
     getCourseList,
     editCourse,
-    deleteCourse
+    deleteCourse,
+    getCoursePlanList,
+    editCoursePlan,
+    deleteCoursePlan
 } from '@/api/mide'
 
 const mide = {
@@ -100,6 +103,33 @@ const mide = {
         deleteCourse(commit, params) {
             return new Promise((resolve, reject) => {
                 deleteCourse(params).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+        getCoursePlanList(commit, params) {
+            return new Promise((resolve, reject) => {
+                getCoursePlanList(params).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+        editCoursePlan(commit, params) {
+            return new Promise((resolve, reject) => {
+                editCoursePlan(params).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+        deleteCoursePlan(commit, params) {
+            return new Promise((resolve, reject) => {
+                deleteCoursePlan(params).then(response => {
                     resolve(response)
                 }).catch(error => {
                     reject(error)
