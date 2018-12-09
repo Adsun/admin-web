@@ -10,9 +10,7 @@ const user = {
 
   actions: {
     // 登录
-    Login({
-      commit
-    }, userInfo) {
+    Login(commit, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         login(username, userInfo.password, userInfo.rememberMe).then(response => {
@@ -24,9 +22,7 @@ const user = {
     },
 
     // 获取用户信息
-    CheckAuth({
-      commit
-    }) {
+    CheckAuth(commit) {
       return new Promise((resolve, reject) => {
         checkAuth().then(response => {
           resolve(response)

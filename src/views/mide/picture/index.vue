@@ -119,13 +119,11 @@ export default {
   methods: {
     // 上传成功后
     uploadSuccess(file, suss) {
-      debugger
       this.loading = false;
       this.createData.path = file.data;
     },
     // 上传失败
     uploadError(file, err) {
-      debugger
       this.loading = false;
       this.$message({
         message: "上传失败",
@@ -149,7 +147,6 @@ export default {
           }
         })
         .catch(err => {
-          debugger;
           this.$message({
             type: "waring",
             message: err

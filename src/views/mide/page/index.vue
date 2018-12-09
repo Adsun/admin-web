@@ -1,79 +1,21 @@
 <!--员工管理-->
 <template>
   <div class="app-container">
-    <el-col :span="18">
-      <el-button style="float: left" @click="addDialog = true">添加</el-button>
-    </el-col>
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column type="index" label="序号" width="70"/>
-      <el-table-column prop="articleName" label="标签名" width="200"/>
-      <el-table-column prop="articleContent" label="内容" width="400"/>
-      <el-table-column prop="contentUrl" label="跳转链接" width="400"/>
-      <el-table-column prop="operation" label="操作">
-        <template slot-scope="scope">
-          <el-button type="text" @click="editArticle(scope.row)">编辑</el-button>
-          <el-button type="text" @click="deleteArticle(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <!--分页-->
-    <el-row class="pageDoct">
-      <el-col>
-        <el-pagination
-          background
-          layout="prev, pager, next, jumper"
-          page-size.sync="searchformData.size"
-          :pager-count="7"
-          :page-count="totalPage"
-          @current-change="toPage"
-        ></el-pagination>
-      </el-col>
-    </el-row>
-    <div id="editor">
-        <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
+    <div>
+      <div ref="editor" style="text-align:left"></div>
     </div>
-    <!--添加按钮弹窗-->
-    <el-dialog :visible.sync="addDialog" width="30%" center>
-      <el-form :model="createData" label-width="80px" ref="createData" >
-        <el-form-item label="标签名" prop="articleId">
-          <el-select v-model="createData.articleId" placeholder="请选择">
-            <el-option
-              v-for="constant in constantList"
-              :key="constant.constantId"
-              :label="constant.constantName"
-              :value="constant.constantId"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="内容" prop="articleContent">
-          <el-col >
-            <el-input type="textarea"
-                    :autosize="{ minRows: 2, maxRows: 10}"  
-                    v-model="createData.articleContent" autocomplete="off"/>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="跳转链接" prop="contentUrl">
-          <el-col >
-            <el-input v-model="createData.contentUrl" autocomplete="off"/>
-          </el-col>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="addDialog = false">取 消</el-button>
-        <el-button type="primary" @click="createArticle('createData')">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import { validatMobile } from "@/utils/validate";
 import { Message, MessageBox } from "element-ui";
+import E from "wangeditor";
 
 export default {
   data() {
     return {
+      editorContent: "",
       searchformData: {
         // 查询参数
         number: 1,
@@ -100,12 +42,16 @@ export default {
     }
   },
   created() {
-    var E = window.wangEditor
-    var editor = new E('#editor')
-    // 或者 var editor = new E( document.getElementById('editor') )
-    editor.create()
-    this.getConstantList()
-    this.getArticleList()
+    this.getConstantList();
+    this.getArticleList();
+  },
+  mounted() {
+    var editor = new E(this.$refs.editor);
+    editor.customConfig.uploadImgShowBase64 = true
+    editor.customConfig.onchange = html => {
+      this.editorContent = html;
+    };
+    editor.create();
   },
   methods: {
     getArticleList() {
@@ -127,7 +73,7 @@ export default {
     },
     getConstantList() {
       this.$store
-        .dispatch("getConstantList", {types: "1,3,4"} )
+        .dispatch("getConstantList", { types: "1,3,4" })
         .then(resolve => {
           if (resolve.code == 200) {
             this.constantList = resolve.data;

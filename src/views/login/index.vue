@@ -1,30 +1,50 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left"
+    >
       <h3 class="title">网站管理系统</h3>
       <el-form-item prop="username">
         <span class="svg-container">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="user"/>
         </span>
-        <el-input v-model="loginForm.username" name="username" type="text" auto-complete="on" placeholder="username" />
+        <el-input
+          v-model="loginForm.username"
+          name="username"
+          type="text"
+          auto-complete="off"
+          placeholder="请输入用户名"
+        />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
-          <svg-icon icon-class="password" />
+          <svg-icon icon-class="password"/>
         </span>
         <el-input
           :type="pwdType"
           v-model="loginForm.password"
           name="password"
-          auto-complete="on"
-          placeholder="password"
-          @keyup.enter.native="handleLogin" />
+          auto-complete="off"
+          placeholder="请输入密码"
+          @keyup.enter.native="handleLogin"
+        />
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="color: white; margin-left: 10px; margin-bottom: 10px">本机自动登陆</el-checkbox>
+      <el-checkbox
+        v-model="loginForm.rememberMe"
+        style="color: white; margin-left: 10px; margin-bottom: 10px"
+      >本机自动登陆</el-checkbox>
       <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
-          Sign in
-        </el-button>
+        <el-button
+          :loading="loading"
+          type="primary"
+          style="width:100%;"
+          @click.native.prevent="handleLogin"
+        >登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -34,90 +54,78 @@
 // import { isvalidUsername } from '@/utils/validate'
 
 import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item.vue";
-import { Message } from 'element-ui';
+import { Message, MessageBox } from "element-ui";
 
 export default {
-  components: {ElFormItem},
-  name: 'Login',
+  components: { ElFormItem },
+  name: "Login",
   data() {
-    // const validateUsername = (rule, value, callback) => {
-    // if (!isvalidUsername(value)) {
-    // callback(new Error('请输入正确的用户名'))
-    // } else {
-    // callback()
-    // }
-    // }
     const validatePass = (rule, value, callback) => {
       if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
+        callback(new Error("密码不能小于5位"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     return {
       loginForm: {
-        username: '', // 用户名
-        password: '', // 验证码
-        rememberMe: '' // 自动登陆
+        username: "", // 用户名
+        password: "", // 验证码
+        rememberMe: "" // 自动登陆
       },
       loginRules: {
         // username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        username: [{required: true, trigger: 'blur'}],
-        password: [{required: true, trigger: 'blur', validator: validatePass}]
+        username: [{ required: true, trigger: "blur" }],
+        password: [{ required: true, trigger: "blur", validator: validatePass }]
       },
       loading: false,
-      pwdType: 'password',
+      pwdType: "password",
       redirect: undefined
-    }
+    };
   },
   watch: {
     $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect;
       },
       immediate: true
     }
   },
   methods: {
-    // showPwd() {
-    // if (this.pwdType === 'password') {
-    // this.pwdType = ''
-    // } else {
-    // this.pwdType = 'password'
-    // }
-    // },
 
     // 登陆
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then((resolve) => {
-            this.loading = false
-            if (resolve.code === 200) {
-              this.$router.push({ path: '/dashboard' })
-            } else if (resolve.code === 502) {
-              this.$message({
-          type: 'waring',
-          message: '密码错误'
-        })
-            }
-          }).catch(() => {
-            this.loading = false
-          })
+          this.loading = true;
+          this.$store
+            .dispatch("Login", this.loginForm)
+            .then(resolve => {
+              this.loading = false;
+              if (resolve.code === 200) {
+                this.$router.push({ path: "/dashboard" });
+              } else {
+                this.$message({
+                  type: "warning",
+                  message: resolve.desc
+                });
+              }
+            })
+            .catch(() => {
+              this.loading = false;
+            });
         } else {
-          console.log('error submit!!')
-          return false
+          return false;
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-$bg:#2d3a4b;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$light_gray: #eee;
 
 /* reset element-ui css */
 .login-container {
@@ -140,7 +148,7 @@ $light_gray:#eee;
   }
 
   .duanyan {
-    width:30%;
+    width: 30%;
     display: inline-block;
     height: 47px;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -157,13 +165,12 @@ $light_gray:#eee;
     color: #454545;
   }
 }
-
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 .login-container {
   position: fixed;
   height: 100%;

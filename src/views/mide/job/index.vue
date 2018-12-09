@@ -5,14 +5,14 @@
       <el-button style="float: left" @click="addDialog = true">添加</el-button>
     </el-col>
     <el-table :data="tableData" style="width: 100%">
-      <el-table-column type="index" label="序号" width="70"/>
-      <el-table-column prop="courseDate" label="日期" width="200"/>
-      <el-table-column prop="courseTime" label="课程时间" width="200"/>
-      <el-table-column prop="courseDtl" label="课程内容" width="200"/>
+      <el-table-column type="index" label="序号" width="50"/>
+      <el-table-column prop="name" label="职位名称" width="200"/>
+      <el-table-column prop="englishName" label="职位英文名" width="200"/>
+      <el-table-column prop="jobDtl" label="职位详情" width="300"/>
       <el-table-column prop="operation" label="操作">
         <template slot-scope="scope">
-          <el-button type="text" @click="editCoursePlan(scope.row)">编辑</el-button>
-          <el-button type="text" @click="deleteCoursePlan(scope.row)">删除</el-button>
+          <el-button type="text" @click="editJob(scope.row)">编辑</el-button>
+          <el-button type="text" @click="deleteJob(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -32,33 +32,31 @@
     <!--添加按钮弹窗-->
     <el-dialog :visible.sync="addDialog" width="30%" center>
       <el-form :model="createData" label-width="80px" ref="createData">
-        <el-form-item label="日期" prop="courseDate">
+        <el-form-item label="职位名称" prop="name">
           <el-col>
-            <el-input v-model="createData.courseDate" autocomplete="off"/>
+            <el-input v-model="createData.name" autocomplete="off"/>
           </el-col>
         </el-form-item>
-        <el-form-item label="课程时间" prop="courseTime">
+        <el-form-item label="职位英文名" prop="englishName">
           <el-col>
-            <el-input type="textarea"
-                    :autosize="{ minRows: 2, maxRows: 10}" v-model="createData.courseTime" autocomplete="off"/>
+            <el-input v-model="createData.englishName" autocomplete="off"/>
           </el-col>
         </el-form-item>
-        <el-form-item label="课程内容" prop="courseDtl">
+        <el-form-item label="职位详情" prop="jobDtl">
           <el-col>
             <el-input type="textarea"
                     :autosize="{ minRows: 2, maxRows: 10}"
-                    v-model="createData.courseDtl" autocomplete="off"/>
+                     v-model="createData.jobDtl" autocomplete="off"/>
           </el-col>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialog = false">取 消</el-button>
-        <el-button type="primary" @click="createCoursePlan('createData')">确 定</el-button>
+        <el-button type="primary" @click="createJob('createData')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
-
 <script>
 import { validatMobile } from "@/utils/validate";
 import { Message, MessageBox } from "element-ui";
@@ -66,22 +64,18 @@ import { Message, MessageBox } from "element-ui";
 export default {
   data() {
     return {
-      courseId: null,
       searchformData: {
         // 查询参数
-        courseId: null,
         number: 1,
         size: 10
       },
-      constantList: [],
       totalPage: 1, // 总页数
       tableData: [], // 列表数据
       createData: {
         id: "",
-        courseDate: "",
-        courseTime:"",
-        courseDtl:"",
-        courseId:"",
+        jobDtl: "",
+        name:"",
+        englishName:""
       },
       addDialog: false // 弹窗是否显示
     };
@@ -95,14 +89,12 @@ export default {
     }
   },
   created() {
-    this.courseId = this.$route.query.courseId;
-    this.searchformData.courseId = this.$route.query.courseId;
-    this.getCoursePlanList();
+    this.getJobList();
   },
   methods: {
-    getCoursePlanList() {
+    getJobList() {
       this.$store
-        .dispatch("getCoursePlanList", this.searchformData)
+        .dispatch("getJobList", this.searchformData)
         .then(resolve => {
           if (resolve.code == 200) {
             this.tableData = resolve.data.content;
@@ -119,25 +111,17 @@ export default {
     // 查询
     search() {
       this.$set(this.searchformData, "number", 1);
-      this.getCoursePlanList();
+      this.getJobList();
     },
     // 新建用户
-    createCoursePlan(form) {
+    createJob(form) {
       this.$refs[form].validate(valid => {
-        if (this.courseId === null) {
-          this.$message({
-                  type: "waring",
-                  message: "当前课程信息有误"
-                });
-          return
-        }
-        this.createData.courseId = this.courseId
         if (valid) {
           this.$store
-            .dispatch("editCoursePlan", this.createData)
+            .dispatch("editJob", this.createData)
             .then(resolve => {
               if (resolve.code == 200) {
-                this.getCoursePlanList(); // 刷新列表数据
+                this.getJobList(); // 刷新列表数据
                 this.addDialog = false; // 隐藏新增的diglog
                 this.$message({
                   type: "success",
@@ -155,22 +139,21 @@ export default {
       });
     },
     // 编辑
-    editCoursePlan(row) {
+    editJob(row) {
       console.log(row);
       this.$set(this.createData, "id", row.id);
-      this.$set(this.createData, "courseDate", row.courseDate);
-      this.$set(this.createData, "courseTime", row.courseTime);
-      this.$set(this.createData, "courseDtl", row.courseDtl);
-      this.$set(this.createData, "courseId", this.courseId);
+      this.$set(this.createData, "jobDtl", row.jobDtl);
+      this.$set(this.createData, "name", row.name);
+      this.$set(this.createData, "eName", row.eName);
       this.addDialog = true;
     },
     //  点击分页
     toPage(e) {
       this.$set(this.searchformData, "number", e);
-      this.getCourseList();
+      this.getJobList();
     },
     // 删除用户
-    deleteCoursePlan(row) {
+    deleteJob(row) {
       MessageBox.confirm("您确定要删除吗？", {
         confirmButtonText: "确定删除",
         cancelButtonText: "取消",
@@ -178,11 +161,11 @@ export default {
       })
         .then(() => {
           this.$store
-            .dispatch("deleteCoursePlan", { id: row.id })
+            .dispatch("deleteJob", { id: row.id })
             .then(resolve => {
               if (resolve.code === 200) {
                 this.$set(this.searchformData, "number", 1);
-                this.getCoursePlanList();
+                this.getJobList();
                 this.$message({
                   message: "删除成功",
                   type: "success"
