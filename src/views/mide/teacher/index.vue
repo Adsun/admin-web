@@ -6,13 +6,20 @@
     </el-col>
     <el-table :data="tableData" style="width: 100%">
       <el-table-column type="index" label="序号" width="70"/>
-      <el-table-column prop="articleName" label="标签名" width="200"/>
-      <el-table-column prop="articleContent" label="内容" width="400"/>
-      <el-table-column prop="contentUrl" label="跳转链接" width="400"/>
+      <el-table-column prop="name" label="姓名" width="100"/>
+      <el-table-column prop="title" label="介绍标题" width="100"/>
+      <el-table-column prop="detail" label="介绍" width="200"/>
+      <el-table-column prop="summary" label="简介" width="200"/>
+      <el-table-column prop="imgUrl" label="图片" width="200">
+        <template slot-scope="scope">
+          <img :src="scope.row.imgUrl" alt style="width: 100px;height: 50px">
+        </template>
+      </el-table-column>
+      <el-table-column prop="link" label="跳转链接" width="200"/>
       <el-table-column prop="operation" label="操作">
         <template slot-scope="scope">
-          <el-button type="text" @click="editArticle(scope.row)">编辑</el-button>
-          <el-button type="text" @click="deleteArticle(scope.row)">删除</el-button>
+          <el-button type="text" @click="editTeacher(scope.row)">编辑</el-button>
+          <el-button type="text" @click="deleteTeacher(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -32,32 +39,56 @@
     <!--添加按钮弹窗-->
     <el-dialog :visible.sync="addDialog" width="30%" center>
       <el-form :model="createData" label-width="80px" ref="createData" >
-        <el-form-item label="标签名" prop="articleId">
-          <el-select v-model="createData.articleId" placeholder="请选择">
-            <el-option
-              v-for="constant in constantList"
-              :key="constant.constantId"
-              :label="constant.constantName"
-              :value="constant.constantId"
-            ></el-option>
-          </el-select>
+        <el-form-item label="姓名" prop="name">
+          <el-col >
+            <el-input v-model="createData.name" autocomplete="off"/>
+          </el-col>
         </el-form-item>
-        <el-form-item label="内容" prop="articleContent">
+        <el-form-item label="介绍标题" prop="title">
+          <el-col >
+            <el-input v-model="createData.title" autocomplete="off"/>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="介绍" prop="detail">
           <el-col >
             <el-input type="textarea"
                     :autosize="{ minRows: 2, maxRows: 10}"  
-                    v-model="createData.articleContent" autocomplete="off"/>
+                    v-model="createData.detail" autocomplete="off"/>
           </el-col>
         </el-form-item>
-        <el-form-item label="跳转链接" prop="contentUrl">
+        <el-form-item label="简介" prop="summary">
           <el-col >
-            <el-input v-model="createData.contentUrl" autocomplete="off"/>
+            <el-input type="textarea"
+                    :autosize="{ minRows: 2, maxRows: 10}"  
+                    v-model="createData.summary" autocomplete="off"/>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="图片" prop="imgUrl">
+          <el-upload
+            action="http://118.24.110.84:18080/picture/upload"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :limit="1"
+            :on-success="uploadSuccess"
+            :on-error="uploadError"
+            :with-credentials="true"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt>
+          </el-dialog>
+        </el-form-item>
+        <el-form-item label="跳转链接" prop="link">
+          <el-col >
+            <el-input v-model="createData.link" autocomplete="off"/>
           </el-col>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialog = false">取 消</el-button>
-        <el-button type="primary" @click="createArticle('createData')">确 定</el-button>
+        <el-button type="primary" @click="createTeacher('createData')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -70,6 +101,8 @@ import { Message, MessageBox } from "element-ui";
 export default {
   data() {
     return {
+      dialogImageUrl: "",
+      dialogVisible: false,
       searchformData: {
         // 查询参数
         number: 1,
@@ -80,9 +113,12 @@ export default {
       tableData: [], // 列表数据
       createData: {
         id: "",
-        articleId: "",
-        articleContent: "",
-        contentUrl: ""
+        name: "",
+        title:"",
+        summary: "",
+        detail: "",
+        imgUrl:"",
+        link:""
       },
       addDialog: false // 弹窗是否显示
     };
@@ -93,21 +129,43 @@ export default {
       if (!curVal && oldVal) {
         this.createData = {
         id: "",
-        articleId: "",
-        articleContent: "",
-        contentUrl: ""
-      }// form表单重置
+        name: "",
+        title:"",
+        summary: "",
+        detail: "",
+        imgUrl:"",
+        link:""
+      } // form表单重置
       }
     }
   },
   created() {
-    this.getConstantList()
-    this.getArticleList()
+    this.getTeacherList()
   },
   methods: {
-    getArticleList() {
+     // 上传成功后
+    uploadSuccess(file, suss) {
+      this.loading = false;
+      this.createData.path = file.data;
+    },
+    // 上传失败
+    uploadError(file, err) {
+      this.loading = false;
+      this.$message({
+        message: "上传失败",
+        type: "warning"
+      });
+    },
+    handleRemove(file, fileList) {
+      this.createData.path = ""
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    getTeacherList() {
       this.$store
-        .dispatch("getArticleList", this.searchformData)
+        .dispatch("getTeacherList", this.searchformData)
         .then(resolve => {
           if (resolve.code == 200) {
             this.tableData = resolve.data.content;
@@ -121,35 +179,20 @@ export default {
           });
         });
     },
-    getConstantList() {
-      this.$store
-        .dispatch("getConstantList", {types: "1,3,4"} )
-        .then(resolve => {
-          if (resolve.code == 200) {
-            this.constantList = resolve.data;
-          }
-        })
-        .catch(err => {
-          this.$message({
-            type: "waring",
-            message: err
-          });
-        });
-    },
     // 查询
     search() {
       this.$set(this.searchformData, "number", 1);
-      this.getArticleList();
+      this.getTeacherList();
     },
     // 新建用户
-    createArticle(form) {
+    createTeacher(form) {
       this.$refs[form].validate(valid => {
         if (valid) {
           this.$store
-            .dispatch("editArticle", this.createData)
+            .dispatch("editTeacher", this.createData)
             .then(resolve => {
               if (resolve.code == 200) {
-                this.getArticleList(); // 刷新列表数据
+                this.getTeacherList(); // 刷新列表数据
                 this.addDialog = false; // 隐藏新增的diglog
                 this.$message({
                   type: "success",
@@ -167,21 +210,24 @@ export default {
       });
     },
     // 编辑
-    editArticle(row) {
+    editTeacher(row) {
       console.log(row);
       this.$set(this.createData, "id", row.id);
-      this.$set(this.createData, "articleId", row.articleId);
-      this.$set(this.createData, "articleContent", row.articleContent);
-      this.$set(this.createData, "contentUrl", row.contentUrl);
+      this.$set(this.createData, "name", row.name);
+      this.$set(this.createData, "summary", row.summary);
+      this.$set(this.createData, "detail", row.detail);
+      this.$set(this.createData, "imgUrl", row.imgUrl);
+      this.$set(this.createData, "link", row.link);
+      this.$set(this.createData, "title", row.title);
       this.addDialog = true;
     },
     //  点击分页
     toPage(e) {
       this.$set(this.searchformData, "number", e);
-      this.getArticleList();
+      this.getTeacherList();
     },
     // 删除用户
-    deleteArticle(row) {
+    deleteTeacher(row) {
       MessageBox.confirm("您确定要删除吗？", {
         confirmButtonText: "确定删除",
         cancelButtonText: "取消",
@@ -189,7 +235,7 @@ export default {
       })
         .then(() => {
           this.$store
-            .dispatch("deleteArticle", { id: row.id })
+            .dispatch("deleteTeacher", { id: row.id })
             .then(resolve => {
               if (resolve.code === 200) {
                 this.$set(this.searchformData, "number", 1);

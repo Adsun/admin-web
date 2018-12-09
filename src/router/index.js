@@ -82,6 +82,15 @@ export const constantRouterMap = [{
                 }
             },
             {
+                path: '/teacher',
+                name: 'teacher',
+                component: () =>
+                    import ('@/views/mide/teacher/index'),
+                meta: {
+                    title: '教师信息'
+                }
+            },
+            {
                 path: '/course',
                 name: 'course',
                 component: () =>

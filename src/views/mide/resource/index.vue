@@ -183,8 +183,19 @@ export default {
   watch: {
     // 清除form表单数据
     addDialog(curVal, oldVal) {
-      if (!curVal) {
-        this.$refs["createData"].resetFields(); // form表单重置
+      if (!curVal && oldVal) {
+        this.createData = {
+        id: "",
+        constantId: "",
+        resName:"",
+        resContent:"",
+        videoUrl:"",
+        qrcUrl:"",
+        bdyUrl:"",
+        bdyCode: "",
+        imgUrl: "",
+        playUrl: ""
+      } // form表单重置
       }
     }
   },

@@ -23,6 +23,9 @@ import {
     getEditList,
     updateEdit,
     deleteEdit,
+    getTeacherList,
+    editTeacher,
+    deleteTeacher
 } from '@/api/mide'
 
 const mide = {
@@ -240,6 +243,33 @@ const mide = {
         deleteEdit(commit, params) {
             return new Promise((resolve, reject) => {
                 deleteEdit(params).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+        getTeacherList(commit, params) {
+            return new Promise((resolve, reject) => {
+                getTeacherList(params).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+        editTeacher(commit, params) {
+            return new Promise((resolve, reject) => {
+                editTeacher(params).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+        deleteTeacher(commit, params) {
+            return new Promise((resolve, reject) => {
+                deleteTeacher(params).then(response => {
                     resolve(response)
                 }).catch(error => {
                     reject(error)

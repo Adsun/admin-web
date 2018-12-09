@@ -128,8 +128,15 @@ export default {
   watch: {
     // 新增编辑用户弹窗隐藏时，清除form表单数据
     'addDialog'(curVal, oldVal) {
-      if(!curVal){
-        this.$refs['createData'].resetFields() // 新增联系人的form表单重置
+      if (!curVal && oldVal) {
+        this.createData = {
+        id: null, // 用户id,新增不用上传
+        userName: '', // 账户
+        fullName: '', // 用户名
+        passWord: '', // 密码
+        checkPassWord: '',
+        adminInd: false
+      }// 新增联系人的form表单重置
       }
     },
   },

@@ -168,8 +168,19 @@ export default {
   watch: {
     // 清除form表单数据
     addDialog(curVal, oldVal) {
-      if (!curVal) {
-        this.$refs["createData"].resetFields(); // form表单重置
+      if (!curVal && oldVal) {
+        this.createData = {
+        id: "",
+        constantId: "",
+        courseName:"",
+        startTime:"",
+        price:"",
+        courseDtl:"",
+        imgUrl:"",
+        teacher: "",
+        teacherDtl: "",
+        teacherImg: ""
+      }// form表单重置
       }
     }
   },

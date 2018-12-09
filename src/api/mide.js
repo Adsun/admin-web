@@ -190,3 +190,27 @@ export function deleteEdit(params) {
         params
     })
 }
+
+export function getTeacherList(params) {
+    return request({
+        url: '/teacher',
+        method: 'get',
+        params
+    })
+}
+
+export function editTeacher(params) {
+    return request({
+        url: '/teacher',
+        method: 'post',
+        data: params
+    })
+}
+
+export function deleteTeacher(params) {
+    return request({
+        url: '/teacher',
+        method: 'delete',
+        params
+    })
+}
