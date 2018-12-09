@@ -45,13 +45,11 @@ export default {
         number: 1,
         size: 10
       },
-      constantList: [],
       totalPage: 1, // 总页数
       tableData: [], // 列表数据
     };
   },
   created() {
-    this.getConstantList();
     this.getEditList();
   },
   methods: {
@@ -62,21 +60,6 @@ export default {
           if (resolve.code == 200) {
             this.tableData = resolve.data.content;
             this.totalPage = resolve.data.totalPages;
-          }
-        })
-        .catch(err => {
-          this.$message({
-            type: "waring",
-            message: err
-          });
-        });
-    },
-    getConstantList() {
-      this.$store
-        .dispatch("getConstantList", { types: "5" })
-        .then(resolve => {
-          if (resolve.code == 200) {
-            this.constantList = resolve.data;
           }
         })
         .catch(err => {
