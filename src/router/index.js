@@ -128,12 +128,22 @@ export const constantRouterMap = [{
                 }
             },
             {
-                path: '/page',
-                name: 'page',
+                path: '/editList',
+                name: 'editList',
                 component: () =>
-                    import ('@/views/mide/page/index'),
+                    import ('@/views/mide/editList/index'),
                 meta: {
                     title: '页面管理'
+                }
+            },
+            {
+                path: '/edit',
+                name: 'edit',
+                hidden: true,
+                component: () =>
+                    import ('@/views/mide/editList/edit/index'),
+                meta: {
+                    title: '页面编辑'
                 }
             }
         ]
