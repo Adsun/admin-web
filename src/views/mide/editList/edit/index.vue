@@ -14,6 +14,23 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="图片" prop="imgUrl">
+          <el-upload
+            action="http://118.24.110.84:18080/picture/upload"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+            :limit="1"
+            :on-success="uploadSuccess"
+            :on-error="uploadError"
+            :with-credentials="true"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt>
+          </el-dialog>
+        </el-form-item>
       <el-form-item label="页面标题" prop="title">
         <el-col>
           <el-input v-model="createData.title" autocomplete="off"/>
@@ -55,10 +72,14 @@ import E from 'wangeditor'
 export default {
   data() {
     return {
+      dialogImageUrl: "",
+      dialogVisible: false,
+
       constantList: [],
       editorContent: "",
       createData: {
         id: "",
+        imgUrl:"",
         constantId: "",
         subTitle: "",
         title: "",
@@ -85,6 +106,26 @@ export default {
     }
   },
   methods: {
+    // 上传成功后
+    uploadSuccess(file, suss) {
+      this.loading = false;
+      this.createData.imgUrl = file.data;
+    },
+    // 上传失败
+    uploadError(file, err) {
+      this.loading = false;
+      this.$message({
+        message: "上传失败",
+        type: "warning"
+      });
+    },
+    handleRemove(file, fileList) {
+      this.createData.imgUrl = ""
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
      getConstantList() {
       this.$store
         .dispatch("getConstantList", { types: "5" })

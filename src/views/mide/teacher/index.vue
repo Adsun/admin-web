@@ -146,7 +146,7 @@ export default {
      // 上传成功后
     uploadSuccess(file, suss) {
       this.loading = false;
-      this.createData.path = file.data;
+      this.createData.imgUrl = file.data;
     },
     // 上传失败
     uploadError(file, err) {
@@ -157,7 +157,7 @@ export default {
       });
     },
     handleRemove(file, fileList) {
-      this.createData.path = ""
+      this.createData.imgUrl = ""
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
