@@ -99,6 +99,15 @@ export const constantRouterMap = [{
                         title: '课程计划'
                     }
                 }]
+            },
+            {
+                path: '/page',
+                name: 'page',
+                component: () =>
+                    import ('@/views/mide/page/index'),
+                meta: {
+                    title: '页面管理'
+                }
             }
         ]
     },
