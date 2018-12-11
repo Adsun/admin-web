@@ -13,7 +13,7 @@
       <el-table-column prop="operation" label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="edit(scope.row)">页面编辑</el-button>
-          <el-button type="text" @click="deleteCourse(scope.row)">删除</el-button>
+          <el-button type="text" @click="deleteEdit(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
