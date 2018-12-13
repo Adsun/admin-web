@@ -10,6 +10,7 @@
       <el-table-column prop="courseName" label="课程名称" width="80"/>
       <el-table-column prop="startTime" label="开始时间" width="80"/>
       <el-table-column prop="price" label="价格" width="80"/>
+      <el-table-column prop="disCount" label="优惠信息" width="80"/>
       <el-table-column prop="courseDtl" label="课程详情" width="150"/>
       <el-table-column prop="imgUrl" label="课程图片" width="150">
         <template slot-scope="scope">
@@ -70,6 +71,11 @@
         <el-form-item label="价格" prop="price">
           <el-col>
             <el-input v-model="createData.price" autocomplete="off"/>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="优惠信息" prop="price">
+          <el-col>
+            <el-input v-model="createData.disCount" autocomplete="off"/>
           </el-col>
         </el-form-item>
         <el-form-item label="课程详情" prop="courseDtl">
@@ -160,7 +166,8 @@ export default {
         imgUrl:"",
         teacher: "",
         teacherDtl: "",
-        teacherImg: ""
+        teacherImg: "",
+        disCount:""
       },
       addDialog: false // 弹窗是否显示
     };
@@ -179,7 +186,8 @@ export default {
         imgUrl:"",
         teacher: "",
         teacherDtl: "",
-        teacherImg: ""
+        teacherImg: "",
+        disCount:""
       }// form表单重置
       }
     }
