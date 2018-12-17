@@ -8,6 +8,7 @@
       <el-table-column type="index" label="序号" width="50"/>
       <el-table-column prop="constantName" label="课程类别" width="80"/>
       <el-table-column prop="courseName" label="课程名称" width="80"/>
+      <el-table-column prop="courseLink" label="课程(报名)链接" width="80"/>
       <el-table-column prop="startTime" label="开始时间" width="80"/>
       <el-table-column prop="price" label="价格" width="80"/>
       <el-table-column prop="disCount" label="优惠信息" width="80"/>
@@ -61,6 +62,11 @@
         <el-form-item label="课程名称" prop="courseName">
           <el-col>
             <el-input v-model="createData.courseName" autocomplete="off"/>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="课程(报名)链接" prop="courseName">
+          <el-col>
+            <el-input v-model="createData.courseLink" autocomplete="off"/>
           </el-col>
         </el-form-item>
         <el-form-item label="开始时间" prop="startTime">
@@ -167,7 +173,8 @@ export default {
         teacher: "",
         teacherDtl: "",
         teacherImg: "",
-        disCount:""
+        disCount:"",
+        courseLink:""
       },
       addDialog: false // 弹窗是否显示
     };
