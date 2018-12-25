@@ -173,7 +173,7 @@ export default {
     //  点击分页
     toPage(e) {
       this.$set(this.searchformData, "number", e);
-      this.getCourseList();
+      this.getCoursePlanList();
     },
     // 删除用户
     deleteCoursePlan(row) {
