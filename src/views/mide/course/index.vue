@@ -194,7 +194,8 @@ export default {
         teacher: "",
         teacherDtl: "",
         teacherImg: "",
-        disCount:""
+        disCount:"",
+        courseLink:""
       }// form表单重置
       }
     }
@@ -314,6 +315,9 @@ export default {
       this.$set(this.createData, "teacher", row.teacher);
       this.$set(this.createData, "teacherDtl", row.teacherDtl);
       this.$set(this.createData, "teacherImg", row.teacherImg);
+      this.$set(this.createData, "courseLink", row.courseLink);
+      this.$set(this.createData, "disCount", row.disCount);
+      
       this.addDialog = true;
     },
     //  点击分页
