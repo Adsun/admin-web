@@ -97,6 +97,7 @@ export default {
     // editor.customConfig.uploadImgShowBase64 = true;
     editor.customConfig.uploadImgServer = 'http://118.24.110.84:18080/picture/uploadFile'
     editor.customConfig.withCredentials = true
+    editor.customConfig.uploadFileName = 'file'
     editor.create();
     
     editor.txt.html(this.createData.contextStr);
