@@ -94,8 +94,11 @@ export default {
     editor.customConfig.onchange = html => {
       this.editorContent = html;
     };
-    editor.customConfig.uploadImgShowBase64 = true;
+    // editor.customConfig.uploadImgShowBase64 = true;
+    editor.customConfig.uploadImgServer = 'http://118.24.110.84:18080/picture/uploadFile'
+    editor.customConfig.withCredentials = true
     editor.create();
+    
     editor.txt.html(this.createData.contextStr);
   },
   created() {
