@@ -193,7 +193,7 @@ export default {
             .then(resolve => {
               if (resolve.code === 200) {
                 this.$set(this.searchformData, "number", 1);
-                this.getList();
+                this.getArticleList();
                 this.$message({
                   message: "删除成功",
                   type: "success"
