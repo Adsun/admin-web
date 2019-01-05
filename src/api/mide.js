@@ -175,6 +175,14 @@ export function getEditList(params) {
     })
 }
 
+export function getEditListById(params) {
+    return request({
+        url: '/edit/byId',
+        method: 'get',
+        params
+    })
+}
+
 export function updateEdit(params) {
     return request({
         url: '/edit',

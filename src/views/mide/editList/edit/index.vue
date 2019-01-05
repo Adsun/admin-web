@@ -74,6 +74,7 @@ export default {
     return {
       dialogImageUrl: "",
       dialogVisible: false,
+      editor:"",
 
       constantList: [],
       editorContent: "",
@@ -99,14 +100,12 @@ export default {
     editor.customConfig.withCredentials = true
     editor.customConfig.uploadFileName = 'file'
     editor.create();
-    
-    editor.txt.html(this.createData.contextStr);
+    this.editor = editor
   },
   created() {
     this.getConstantList()
-    if (this.$route.query.createData) {
-      this.createData = this.$route.query.createData;
-      this.editorContent = this.createData.contextStr;
+    if (this.$route.query.id) {
+      this.getEditListById(this.$route.query.id)
     }
   },
   methods: {
@@ -129,6 +128,23 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    getEditListById(eid) {
+       this.$store
+        .dispatch("getEditListById", { id: eid })
+        .then(resolve => {
+          if (resolve.code == 200) {
+            this.createData = resolve.data;
+            this.editorContent = this.createData.contextStr;
+            this.editor.txt.html(this.createData.contextStr);
+          }
+        })
+        .catch(err => {
+          this.$message({
+            type: "waring",
+            message: err
+          });
+        });
     },
      getConstantList() {
       this.$store
