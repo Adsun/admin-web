@@ -21,6 +21,7 @@ import {
     getFeedbackList,
     deleteFeedback,
     getEditList,
+    getEditListById,
     updateEdit,
     deleteEdit,
     getTeacherList,
@@ -225,6 +226,15 @@ const mide = {
         getEditList(commit, params) {
             return new Promise((resolve, reject) => {
                 getEditList(params).then(response => {
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+        getEditListById(commit, params) {
+            return new Promise((resolve, reject) => {
+                getEditListById(params).then(response => {
                     resolve(response)
                 }).catch(error => {
                     reject(error)

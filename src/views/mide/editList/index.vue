@@ -79,7 +79,7 @@ export default {
       this.$router.push({
         name:'edit',
         query :{
-          createData:row
+          id:row.id
         }
       })
     },
