@@ -75,7 +75,7 @@
         </el-form-item>
         <el-form-item label="资源图" prop="imgUrl">
           <el-upload
-            action="http://118.24.110.84:18080/picture/upload"
+            action="http://port.midezaixian.com/picture/upload"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
@@ -98,7 +98,7 @@
         </el-form-item>
         <el-form-item label="二维码" prop="qrcUrl">
           <el-upload
-            action="http://118.24.110.84:18080/picture/upload"
+            action="http://port.midezaixian.com/picture/upload"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
@@ -126,7 +126,7 @@
         </el-form-item>
         <el-form-item label="播放图标" prop="playUrl">
           <el-upload
-            action="http://118.24.110.84:18080/picture/upload"
+            action="http://port.midezaixian.com/picture/upload"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"

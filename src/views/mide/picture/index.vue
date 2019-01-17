@@ -48,7 +48,7 @@
         </el-form-item>
         <el-form-item label="图片" prop="path">
           <el-upload
-            action="http://118.24.110.84:18080/picture/upload"
+            action="http://port.midezaixian.com/picture/upload"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"

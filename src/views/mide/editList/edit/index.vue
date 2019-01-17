@@ -16,7 +16,7 @@
       </el-form-item>
       <el-form-item label="图片" prop="imgUrl">
           <el-upload
-            action="http://118.24.110.84:18080/picture/upload"
+            action="http://port.midezaixian.com/picture/upload"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
@@ -95,7 +95,7 @@ export default {
       this.editorContent = html;
     };
     // editor.customConfig.uploadImgShowBase64 = true;
-    editor.customConfig.uploadImgServer = 'http://118.24.110.84:18080/picture/uploadFile'
+    editor.customConfig.uploadImgServer = 'http://port.midezaixian.com/picture/uploadFile'
     editor.customConfig.withCredentials = true
     editor.customConfig.uploadFileName = 'file'
     editor.create();

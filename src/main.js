@@ -16,7 +16,7 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-Vue.prototype.baseUrl = 'http://118.24.110.84:18080' // 接口地址
+Vue.prototype.baseUrl = 'http://port.midezaixian.com' // 接口地址
 Vue.use(ElementUI, { zhLocale })
 
 Vue.config.productionTip = false
