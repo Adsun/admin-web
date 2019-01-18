@@ -76,12 +76,21 @@ export default {
     },
     
     edit(row) {
-      this.$router.push({
+      if (row != null) {
+        this.$router.push({
         name:'edit',
         query :{
           id:row.id
         }
       })
+      } else {
+        this.$router.push({
+        name:'edit',
+        query :{
+        }
+      })
+      }
+      
     },
     //  点击分页
     toPage(e) {
